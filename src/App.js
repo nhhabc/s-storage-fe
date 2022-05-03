@@ -8,6 +8,7 @@ import { useState } from 'react';
 
 function App() {
     const [formShow, setFormShow] = useState(false)
+    const [menuItems, setMenuItems] = useState([])
 
     const showInputForm = () => {
         setFormShow(true)
@@ -17,17 +18,22 @@ function App() {
         setFormShow(false)
     }
 
-    const addFileHandle = () => {
-        
+    const addFileHandle = (item) => {
+
+        console.log(item)
+        setMenuItems(items => [...items, {
+            img: item.img,
+            name: item.name
+        }])
     }
 
     return (
         <div className="App">
             {formShow && <Modal closeForm={hideForm}/>}
-            <Menu/>
+            <Menu listItems={menuItems}/>
             <FileStorageBtn showForm={showInputForm}/>
-            {formShow && <FormInput/>}
-            {/* <TextStorage/> */}
+            {formShow && <FormInput closeForm={hideForm} addFile={addFileHandle}/>}
+            <TextStorage/>
         </div>
     );
 }

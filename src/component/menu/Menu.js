@@ -1,40 +1,17 @@
 import './Menu.js';
 import './Menu.scss';
 
-const menuItems = [
-    {
-        img: require('../../assets/text-logo.png'),
-        title: "Text"
-    },
-    {
-        img: require('../../assets/text-logo.png'),
-        title: "Text"
-    },
-    {
-        img: require('../../assets/text-logo.png'),
-        title: "Text"
-    },
-    {
-        img: require('../../assets/text-logo.png'),
-        title: "Text"
-    },
-    {
-        img: require('../../assets/text-logo.png'),
-        title: "Text"
-    },
-]
-
-function Menu() {
+function Menu(props) {
     return (
         <div className="menu">
-            {menuItems.map((item , index) => {
+            {props.listItems.map((item , index) => {
                 return (
                     <div className="menu-item" key={index}>
                         <div className="menu-image">
-                            <img src={item.img} alt="#"/>
+                            <img src={item.img} alt={item.name}/>
                         </div>
                         <div className="menu-title">
-                            {item.title}
+                            {item.name}
                         </div>
                     </div>
                 )
