@@ -1,0 +1,18 @@
+.formInput {
+    display: flex;
+    justify-content: center;
+}
+
+.btn {
+    margin-top: 5rem;
+    
+    &__add {
+        width: 2rem;
+        height: 2rem;
+        border-radius: 50%;
+        border: none;
+        cursor: pointer;
+        font-size: 2rem;
+        color: green;
+    }
+}
