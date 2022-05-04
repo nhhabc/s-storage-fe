@@ -1,4 +1,3 @@
-import Modal from "../../layout/Modal";
 import Menu from "../menu/Menu";
 import FormInput from "./FormInput";
 import {useState} from "react";
@@ -6,7 +5,6 @@ import Button from "../../layout/Button";
 
 
 const FileContainer = () => {
-
     const [formShow, setFormShow] = useState(false)
     const [menuItems, setMenuItems] = useState([])
 

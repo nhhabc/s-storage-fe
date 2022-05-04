@@ -1,0 +1,35 @@
+.nav {
+    box-sizing: border-box;
+    position: fixed;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    height: 65px;
+    background-color: #79DAE8;
+    z-index: 10;
+
+
+    & a {
+        height: 100%;
+        display: block;
+        padding: 0 20px;
+        color: #0AA1DD;
+        display: inline-block;
+        text-decoration: none;
+        font-size: 20px;
+        text-transform: uppercase;
+        display: flex; 
+        align-items: center;
+        transition: all .3s;
+
+        &:not(:last-child) {
+            border-right: 1px solid #E8F9FD;
+        }
+
+        &:hover {
+            background-color: #7FB5FF;
+            color: #E8F9FD;
+        }
+    }   
+}  
