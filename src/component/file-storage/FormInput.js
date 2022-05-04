@@ -26,6 +26,7 @@ const FormInput = (props) => {
     return (
         <div className='form' onSubmit={getFile}>
             <form className='form__input'>
+                <div className='form__close' onClick={props.closeForm}>&#10005;</div>
                 <input type='file' name='filename' className='form__input-file' onChange={onFileChange}/>
                 {selectedFile && <div className='form__input-filetype'>name: {selectedFile.name}{"\n"}type: {selectedFile.type}</div>}
                 <input type='submit' className='form__input-btn' value='Upload'/>

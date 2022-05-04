@@ -1,0 +1,24 @@
+.context-menu {
+  margin: 10px;
+}
+
+.menu-container {
+  margin: 10px;
+  color: #000;
+  background: #fff;
+  font-size: 15px;
+  border-radius: 5px;
+  box-shadow: 0 1rem 2rem rgba(black, 0.5);
+
+  li {
+    list-style: none;
+    margin: 10px 5px;
+    cursor: pointer;
+    padding: 5px;
+    transition: all .3s;
+
+    &:hover {
+      background-color: #0AA1DD;
+    }
+  }
+}
