@@ -13,7 +13,7 @@ function App() {
             <Routes>
                 <Route path='/folder' element={<FolderContainer/>}/>
                 <Route path='/folder/:folderId' element={<FileContainer/>}/>
-                <Route path='/message' element={<TextStorage/>}/>
+                <Route path='/msg' element={<TextStorage/>}/>
             </Routes>
             </main>
         </div>

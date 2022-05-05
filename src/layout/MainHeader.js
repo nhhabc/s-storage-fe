@@ -5,7 +5,7 @@ const MainHeader = () => {
     return (
         <div className='nav'>
                 <Link to='/folder'><p>Folder</p></Link>
-                <Link to='/message'><p>Message</p></Link>
+                <Link to='/msg'><p>Message</p></Link>
         </div>
     )
 }

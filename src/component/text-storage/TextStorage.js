@@ -16,7 +16,7 @@ function TextStorage() {
                 setMessages(res.data.messages)
             })
         }
-    }, []);
+    }, [messages]);
 
     const onSent = () => {
         if (msgText.trim().length === 0) return;
@@ -38,7 +38,6 @@ function TextStorage() {
             .catch(function (error) {
                 console.log(error);
             });
-
     }
 
     const handleKeyDown = (e) => {

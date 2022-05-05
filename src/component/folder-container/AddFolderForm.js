@@ -1,4 +1,5 @@
 import {useRef} from "react";
+import httpClient from "../../api/http-client";
 
 const AddFolderForm = (props) => {
     const inputRef = useRef();
@@ -8,7 +9,6 @@ const AddFolderForm = (props) => {
         props.addFolder({
             name: inputRef.current.value,
         })
-
         props.closeForm()
     }
 
