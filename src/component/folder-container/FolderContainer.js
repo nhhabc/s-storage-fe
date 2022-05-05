@@ -3,6 +3,8 @@ import Button from "../../layout/Button";
 import FolderList from "./FolderList";
 import AddFolderForm from "./AddFolderForm";
 import {useState} from "react";
+import httpClient from "../../api/http-client";
+import { useEffect } from 'react';
 
 const FolderContainer = () => {
     const [showForm, setShowForm] = useState(false)
@@ -12,13 +14,40 @@ const FolderContainer = () => {
         setShowForm(false)
     }
 
+    useEffect(() => {
+        return () => {
+            httpClient.get("/folder").then(res => {
+                setListFolder(res.data.folder)
+            })
+        }
+    }, []);
+
     const addFolderFunction = (item) => {
-        setListFolder(items => {
-            return [...items, {name:item.name}]
+        if (item.name.trim() === 0) return;
+
+        const newFolder = {
+            _id: null,
+            name: item.name,
+            createdDate: new Date(),
+            file:[]
+        }
+        // Save to server
+        httpClient.post('/folder', {
+            name: item.name,
         })
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
 
-
+        setListFolder(items => {
+            return [...items, newFolder]
+        })
     }
+
+    
 
     return (
         <div className='cover'>

@@ -16,7 +16,7 @@ function TextStorage() {
                 setMessages(res.data.messages)
             })
         }
-    }, [messages]);
+    }, []);
 
     const onSent = () => {
         if (msgText.trim().length === 0) return;

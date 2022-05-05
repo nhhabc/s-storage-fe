@@ -93,4 +93,13 @@
             }
         }    
     }
+
+    &__invalid {
+        position: absolute;
+        font-size: 1.2rem;
+        left: 20px;
+        bottom: 10px;
+        color: #EB5353;
+        font-weight: 500;
+    }
 }

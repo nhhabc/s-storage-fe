@@ -1,5 +1,5 @@
 import './FormInput.scss'
-
+import httpClient from "../../api/http-client";
 import { useState } from 'react';
 
 const FormInput = (props) => {
@@ -14,11 +14,22 @@ const FormInput = (props) => {
         e.preventDefault();
 
         if (!selectedFile) throw new Error('Please enter a file');
+
+        const formData = new FormData()
+        formData.append('file', selectedFile)
         
         props.addFile({
             img: require('../../assets/text-logo.png'),
             name: selectedFile.name
         })
+
+        httpClient.post('/folder/:folderId/', formData)
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
 
         props.closeForm()
     }

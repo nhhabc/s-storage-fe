@@ -1,15 +1,24 @@
 import {useRef} from "react";
-import httpClient from "../../api/http-client";
+import { useState } from "react";
 
 const AddFolderForm = (props) => {
     const inputRef = useRef();
+    const [validInput, setValidInput] = useState(true)
 
     const createFolder = (e) => {
         e.preventDefault();
+
+        const folderName = inputRef.current.value;
+        if(!folderName) {
+            setValidInput(false)
+            return
+        };
+
         props.addFolder({
-            name: inputRef.current.value,
+            name: folderName,
         })
-        props.closeForm()
+        
+        props.closeForm();
     }
 
     return (
@@ -20,6 +29,7 @@ const AddFolderForm = (props) => {
                 <input type='text' name='folder name' className='form__input-folder' ref={inputRef}/>
                 <input type='submit' className='form__input-btn' value='Create'/>
             </form>
+            {!validInput && <div className="form__invalid">Invalid name</div>}
         </div>
     )
 }

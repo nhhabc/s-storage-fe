@@ -3,6 +3,7 @@ import {ReactComponent as FolderIcon} from "../../assets/folder-ico.svg";
 import './FolderContainer.scss'
 
 const FolderList = (props) => {
+
     return (
         <div className='folder-container'>
             {props.listFolder.map((item, index) => {
