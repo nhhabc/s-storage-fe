@@ -11,11 +11,9 @@ function TextStorage() {
     const [msgText, setMsgText] = useState("");
 
     useEffect(() => {
-        return () => {
-            httpClient.get("/msg").then(res => {
-                setMessages(res.data.messages)
-            })
-        }
+        httpClient.get("/msg").then(res => {
+            setMessages(res.data.messages)
+        })
     }, []);
 
     const onSent = () => {

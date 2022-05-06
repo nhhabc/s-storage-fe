@@ -15,11 +15,9 @@ const FolderContainer = () => {
     }
 
     useEffect(() => {
-        return () => {
-            httpClient.get("/folder").then(res => {
-                setListFolder(res.data.folder)
-            })
-        }
+        httpClient.get("/folder").then(res => {
+            setListFolder(res.data.folder)
+        })
     }, []);
 
     const addFolderFunction = (item) => {

@@ -1,29 +1,24 @@
 import './FormInput.scss'
 import httpClient from "../../api/http-client";
-import { useState } from 'react';
+import {useState} from 'react';
 
-const FormInput = (props) => {
+const FormFileInput = (props) => {
     const [selectedFile, setSelectedFile] = useState();
 
     const onFileChange = (e) => {
         setSelectedFile(e.target.files[0])
     }
-    
 
     const getFile = (e) => {
         e.preventDefault();
 
         if (!selectedFile) throw new Error('Please enter a file');
 
-        const formData = new FormData()
-        formData.append('file', selectedFile)
-        
-        props.addFile({
-            img: require('../../assets/text-logo.png'),
-            name: selectedFile.name
-        })
+        const formData = new FormData();
+        formData.append('folderId', props.folderId);
+        formData.append('file', selectedFile);
 
-        httpClient.post('/folder/:folderId/', formData)
+        httpClient.post('/file', formData)
             .then(function (response) {
                 console.log(response);
             })
@@ -39,7 +34,8 @@ const FormInput = (props) => {
             <form className='form__input'>
                 <div className='form__close' onClick={props.closeForm}>&#10005;</div>
                 <input type='file' name='filename' className='form__input-file' onChange={onFileChange}/>
-                {selectedFile && <div className='form__input-filetype'>name: {selectedFile.name}{"\n"}type: {selectedFile.type}</div>}
+                {selectedFile &&
+                <div className='form__input-filetype'>name: {selectedFile.name}{"\n"}type: {selectedFile.type}</div>}
                 <input type='submit' className='form__input-btn' value='Upload'/>
                 {!selectedFile && <div>You must choose a file</div>}
             </form>
@@ -47,4 +43,4 @@ const FormInput = (props) => {
     )
 }
 
-export default FormInput
+export default FormFileInput

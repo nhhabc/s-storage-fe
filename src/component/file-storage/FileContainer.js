@@ -1,12 +1,13 @@
 import Menu from "../menu/Menu";
-import FormInput from "./FormInput";
+import FormFileInput from "./FormFileInput";
 import {useState} from "react";
 import Button from "../../layout/Button";
+import {useParams} from "react-router-dom";
 
-
-const FileContainer = () => {
-    const [formShow, setFormShow] = useState(false)
-    const [menuItems, setMenuItems] = useState([])
+const FileContainer = (props) => {
+    const [formShow, setFormShow] = useState(false);
+    const [menuItems, setMenuItems] = useState([]);
+    const params = useParams()
 
     const showInputForm = () => {
         setFormShow(true)
@@ -17,8 +18,6 @@ const FileContainer = () => {
     }
 
     const addFileHandle = (item) => {
-
-        console.log(item)
         setMenuItems(items => [...items, {
             img: item.img,
             name: item.name
@@ -29,7 +28,7 @@ const FileContainer = () => {
         <div>
             <Menu listItems={menuItems}/>
             <Button funct={showInputForm}>Add File</Button>
-            {formShow && <FormInput closeForm={hideForm} addFile={addFileHandle}/>}
+            {formShow && <FormFileInput folderId={params.folderId} closeForm={hideForm} addFile={addFileHandle}/>}
         </div>
 )
 }
