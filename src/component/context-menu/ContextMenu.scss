@@ -1,5 +1,6 @@
 .context-menu {
   margin: 10px;
+  z-index: 10;
 }
 
 .menu-container {
@@ -10,15 +11,25 @@
   border-radius: 5px;
   box-shadow: 0 1rem 2rem rgba(black, 0.5);
 
-  li {
+  & li,
+  & a {
     list-style: none;
     margin: 10px 5px;
     cursor: pointer;
     padding: 5px;
     transition: all .3s;
+    text-decoration: none;
 
     &:hover {
       background-color: #0AA1DD;
+    }
+
+    &:visited {
+      color: inherit;
+    }
+
+    &:active {
+      color: white;
     }
   }
 }

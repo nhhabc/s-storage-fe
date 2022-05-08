@@ -5,6 +5,8 @@ const AddFolderForm = (props) => {
     const inputRef = useRef();
     const [validInput, setValidInput] = useState(true)
 
+    console.log(props.listFolder)
+
     const createFolder = (e) => {
         e.preventDefault();
 

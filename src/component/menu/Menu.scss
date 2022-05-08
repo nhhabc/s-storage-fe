@@ -1,14 +1,14 @@
 .menu {
   display: flex;
   justify-content: start;
-  padding: 150px 0 0 0;
+  padding: 100px 0 0 0;
   position: relative;
 
   & p {
     position: absolute;
     font-size: 1.5rem;
-    top:100px;
-    left: 100px;
+    top: 10px;
+    left: 10px;
     color: aqua;
   }
 

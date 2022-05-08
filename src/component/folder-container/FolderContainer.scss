@@ -1,11 +1,19 @@
 .cover {
-  width: 100%;
+  max-width: 100%;
   padding: 100px 50px;
 }
 
 .folder-container {
   display: flex;
   justify-content: start;
+  align-items: center;
+
+  &__menu {
+    font-size: 1.5rem;
+    left: 100px;
+    color: aqua;
+    padding-right: 10px;
+  }
 
   &__item {
     text-decoration: none;
@@ -19,6 +27,7 @@
     cursor: pointer;
     transition: all .3s;
     margin-right: 10px;
+    flex: 2 1 auto;
 
     & p {
       margin-left: 15px;
