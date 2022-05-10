@@ -14,6 +14,7 @@
     left: 100px;
     color: aqua;
     padding-right: 10px;
+    flex: 1 0 100%;
   }
 
   &__item {
@@ -28,7 +29,6 @@
     cursor: pointer;
     transition: all .3s;
     margin-right: 10px;
-    flex: 2 1 auto;
 
     & p {
       margin-left: 15px;

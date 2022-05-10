@@ -46,15 +46,16 @@ const FileContainer = (props) => {
         setFiles(files => [...files, fileDetail])
     }
 
-    const deleteFile = () => {
-
+    const deleteFile = (id) => {
+        httpClient.delete(`/file/` +id)
+            .then(res => console.log(res))
     }
 
     const CustomMenu = (props) => {
         return (
             <ul className="context-menu-item">
                 <li>Download</li>
-                <li onClick={props.onDelete}>Delete</li>
+                <li onClick={(e) => console.log(e)}>Delete</li>
             </ul>
         );
     }

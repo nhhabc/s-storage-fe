@@ -66,7 +66,6 @@ const FolderContainer = () => {
     }
 
     const showContextMenu = (id) => {
-        console.log(id)
         setContextMenuId(id);
     }
 
@@ -86,7 +85,7 @@ const FolderContainer = () => {
                 })}
             </div>
 
-            <FileContainer />
+            <FileContainer/>
             <Button funct={setShowForm}>Add Folder</Button>
             {showForm &&
             <AddFolderForm closeForm={closeFormFunction} addFolder={addFolderFunction} listFolder={listFolder}/>}
