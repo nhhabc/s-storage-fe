@@ -15,10 +15,11 @@ const FormFileInput = (props) => {
         if (!selectedFile) throw new Error('Please enter a file');
 
         const formData = new FormData();
-        formData.append('folderId', props.folderId);
-        formData.append('id', props.id);
+        if (props.folderId) {
+            formData.append('folderId', props.folderId);
+        }
         formData.append('file', selectedFile);
-        
+
         httpClient.post('/file', formData)
             .then(function (response) {
                 console.log(response);
@@ -27,7 +28,7 @@ const FormFileInput = (props) => {
                 console.log(error);
             });
 
-        props.addFile(selectedFile)         
+        props.onAddFile(selectedFile)
         props.closeForm()
     }
 

@@ -1,15 +1,14 @@
-.menu {
+.file-container {
   display: flex;
   justify-content: start;
-  padding: 100px 0 0 0;
-  position: relative;
+  padding: 20px 0;
+  flex-wrap: wrap;
 
   & p {
-    position: absolute;
     font-size: 1.5rem;
-    top: 10px;
-    left: 10px;
+    left: 100px;
     color: aqua;
+    padding-right: 10px;
   }
 
   .menu-item {
