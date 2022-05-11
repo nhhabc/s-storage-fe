@@ -2,10 +2,11 @@ import FormFileInput from "./FormFileInput";
 import {useState} from "react";
 import Button from "../../layout/Button";
 import {useParams} from "react-router-dom";
-import { useEffect } from "react";
+import {useEffect} from "react";
 import httpClient from "../../api/http-client";
 import {ContextMenu} from "../context-menu/ContextMenu";
 import "./FileContainer.scss";
+import {downloadFile} from "../../util";
 
 const FileContainer = (props) => {
     const [contextMenuId, setContextMenuId] = useState(null)
@@ -22,9 +23,9 @@ const FileContainer = (props) => {
         setFileFormShow(false)
     }
 
-    useEffect(()=> {
+    useEffect(() => {
         if (parentId) {
-            httpClient.get('/file/'+parentId)
+            httpClient.get('/file?folderId=' + parentId)
                 .then(res => {
                     setFiles(res.data.data.file)
                 });
@@ -34,28 +35,44 @@ const FileContainer = (props) => {
                     setFiles(res.data.data.file)
                 });
         }
-    },[parentId])
+    }, [parentId]);
 
     const addFile = (file) => {
         const fileDetail = {
             name: file.name,
             img: require('../../assets/text-logo.png'),
-            _parentFolder: params.folderId
+            _parentFolder: params.folderId,
+            _id: file._id
         }
+
+        console.log(fileDetail)
 
         setFiles(files => [...files, fileDetail])
     }
 
     const deleteFile = (id) => {
-        httpClient.delete(`/file/` +id)
-            .then(res => console.log(res))
+        setFiles(files => files.filter(file => file._id !== id))
     }
 
     const CustomMenu = (props) => {
+        const deleteFile = () => {
+            httpClient.delete('/file/' + props.file._id)
+                .then(res => console.log(res))
+
+            props.onDelete(props.file._id)
+        }
+
+        const download = () => {
+            httpClient.get('/file/' + props.file._id, {
+                responseType: "blob"
+            })
+                .then(res => downloadFile(res.data, props.file.name))
+        }
+
         return (
             <ul className="context-menu-item">
-                <li>Download</li>
-                <li onClick={(e) => console.log(e)}>Delete</li>
+                <li onClick={download}>Download</li>
+                <li onClick={deleteFile}>Delete</li>
             </ul>
         );
     }
@@ -70,7 +87,10 @@ const FileContainer = (props) => {
                 <p className="title">All files:</p>
                 {files.map((item, index) => {
                     return (
-                        <ContextMenu menu={<CustomMenu folderId={item._parentFolder} onDelete={deleteFile}/>} key={index} tabIndex={index} itemId={item._id} showId={contextMenuId} onShow={() => showContextMenu(item._id)}>
+                        <ContextMenu
+                            menu={<CustomMenu folderId={item._parentFolder} onDelete={deleteFile} file={item}/>}
+                            key={index} tabIndex={index} itemId={item._id} showId={contextMenuId}
+                            onShow={() => showContextMenu(item._id)}>
                             <div className="menu-item">
                                 <div className="menu-image">
                                     <img src={require('../../assets/text-logo.png')} alt={item.name}/>
@@ -85,11 +105,9 @@ const FileContainer = (props) => {
 
             </div>
 
-
-            <Button funct={showFileInputForm}>Add File</Button>
             {fileFormShow && <FormFileInput folderId={parentId} closeForm={hideFileForm} onAddFile={addFile}/>}
         </div>
-)
+    )
 }
 
 export default FileContainer;

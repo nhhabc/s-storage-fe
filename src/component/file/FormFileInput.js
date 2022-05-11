@@ -3,10 +3,10 @@ import httpClient from "../../api/http-client";
 import {useState} from 'react';
 
 const FormFileInput = (props) => {
-    const [selectedFile, setSelectedFile] = useState();
+    const [selectedFile, setSelectedFile] = useState({});
 
     const onFileChange = (e) => {
-        setSelectedFile(e.target.files[0])
+        setSelectedFile(e.target.files[0]);
     }
 
     const getFile = (e) => {
@@ -21,14 +21,12 @@ const FormFileInput = (props) => {
         formData.append('file', selectedFile);
 
         httpClient.post('/file', formData)
-            .then(function (response) {
-                console.log(response);
+            .then(function (res) {
+                props.onAddFile(res.data.file)
             })
             .catch(function (error) {
                 console.log(error);
             });
-
-        props.onAddFile(selectedFile)
         props.closeForm()
     }
 

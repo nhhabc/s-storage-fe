@@ -2,11 +2,9 @@ import './Button.scss'
 
 const Button = (props) => {
     return (
-        <div className='formInputBtn'>
             <div className='btn'>
-                <button className='btn__add' onClick={props.funct}>{props.children}<span>&rarr;</span></button>
+                <button className='button-38' onClick={props.funct}>{props.children}<span>&#x2B;</span></button>
             </div>
-        </div>
     )
 }
 

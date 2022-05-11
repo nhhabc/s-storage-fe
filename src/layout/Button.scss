@@ -1,31 +1,44 @@
-.formInputBtn {
-  display: flex;
-  justify-content: center;
-}
+.button-38 {
+  background-color: #FFFFFF;
+  border: 0;
+  border-radius: .5rem;
+  box-sizing: border-box;
+  color: #111827;
+  font-size: .875rem;
+  font-weight: 600;
+  line-height: 1.25rem;
+  padding: .75rem 1rem;
+  text-align: center;
+  margin: 10px 5px;
+  text-decoration: none #D1D5DB solid;
+  text-decoration-thickness: auto;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  transition: all .3s;
 
-.btn {
-  margin-top: 5rem;
+  &:hover {
+    background-color: rgb(208, 206, 206);
+    transform: translateY(-3px);
+  }
 
-  &__add {
-    width: 100%;
-    text-align: center;
-    padding: 20px 15px;
-    cursor: pointer;
-    border: none;
-    font-size: 1.5rem;
-    border-radius: 10px;
-    color: #E8F9FD;
-    background-color: #0AA1DD;
-    transition: all .3s;
+  &:active {
+    transform: translateY(-1px);
 
-    &:hover {
-      background-color: #79DAE8;
-      color: #2155CD;
-      transform: translateY(-5px);
-    }
+  }
 
-    &:active {
-      transform: translateY(-2px);
-    }
+  &:focus {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+
+  &:focus-visible {
+    box-shadow: none;
   }
 }
+
+
+
+

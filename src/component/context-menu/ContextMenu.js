@@ -1,65 +1,59 @@
-import {useCallback, useEffect, useRef, useState} from "react";
+import {forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState} from "react";
 import './ContextMenu.scss'
 
-export const ContextMenu = ({menu, children, itemId, showId, onShow}) => {
-    const menuRef = useRef(null);
+export const ContextMenu = forwardRef((props, ref) => {
     const [xPos, setXPos] = useState("0px");
     const [yPos, setYPos] = useState("0px");
-    const [showMenu, setShowMenu] = useState(false);
+    const [isShow, setShowMenu] = useState(false);
+    const [menuEl, setMenuEl] = useState(<></>);
 
     const handleContextMenu = useCallback(
         (e) => {
             e.preventDefault();
-
             setXPos(`${e.pageX}px`);
             setYPos(`${e.pageY}px`);
             setShowMenu(true);
-            onShow();
         },
         [setXPos, setYPos]
     );
 
-    const handleClick = useCallback(() => {
-        showMenu && setShowMenu(false);
-    }, [showMenu]);
+    useImperativeHandle(ref, () => ({
+        showMenu(pageX, pageY, data) {
+            setMenuEl(data.menu);
+            setXPos(`${pageX}px`);
+            setYPos(`${pageY}px`);
+            setShowMenu(true);
+        },
 
-    const toggleMenu = (e) => {
-        setShowMenu(false);
+        hideMenu() {
+            setShowMenu(false);
+        }
+    }));
+
+    const showMenu = (pageX, pageY, data) => {
+        setXPos(`${pageX}px`);
+        setYPos(`${pageY}px`);
+        setShowMenu(true);
     }
 
-    useEffect(() => {
-        if (showId !== itemId) toggleMenu();
 
-        document.addEventListener("click", toggleMenu);
-        menuRef.current.addEventListener("click", handleClick);
-        menuRef.current.addEventListener("contextmenu", handleContextMenu);
-        return () => {
-            if (menuRef && menuRef.current) {
-                menuRef.current.addEventListener("click", handleClick);
-                menuRef.current.addEventListener("focus", toggleMenu);
-                menuRef.current.removeEventListener("contextmenu", handleContextMenu);
-            }
-            document.removeEventListener("click", toggleMenu);
-        };
-    },[showId]);
+
+    useEffect(() => {
+    },);
 
     return (
-            <div ref={menuRef} className='context-menu'>
-                {children}
-                {showMenu ? (
-                    <div
-                        className="menu-container"
-                        style={{
-                            position: "absolute",
-                            top: yPos,
-                            left: xPos,
-                        }}
-                    >
-                        {menu}
-                    </div>
-                ) : (
-                    <></>
-                )}
+        <div className={'context-menu' + " " + (isShow ? "show" : "")}>
+            <div
+                className="menu-container"
+                style={{
+                    position: "absolute",
+                    top: yPos,
+                    left: xPos,
+                }}
+            >
+                {menuEl}
             </div>
+
+        </div>
     );
-};
+});

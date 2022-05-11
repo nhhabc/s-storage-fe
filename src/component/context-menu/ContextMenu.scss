@@ -1,5 +1,10 @@
 .context-menu {
+  display: none;
   margin: 10px;
+
+  &.show {
+    display: block;
+  }
 }
 
 .context-menu-item {
@@ -16,6 +21,7 @@
 
   & li,
   & a {
+    color: inherit;
     list-style: none;
     margin: 10px 5px;
     cursor: pointer;
