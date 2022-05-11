@@ -7,16 +7,6 @@ export const ContextMenu = forwardRef((props, ref) => {
     const [isShow, setShowMenu] = useState(false);
     const [menuEl, setMenuEl] = useState(<></>);
 
-    const handleContextMenu = useCallback(
-        (e) => {
-            e.preventDefault();
-            setXPos(`${e.pageX}px`);
-            setYPos(`${e.pageY}px`);
-            setShowMenu(true);
-        },
-        [setXPos, setYPos]
-    );
-
     useImperativeHandle(ref, () => ({
         showMenu(pageX, pageY, data) {
             setMenuEl(data.menu);
@@ -29,17 +19,6 @@ export const ContextMenu = forwardRef((props, ref) => {
             setShowMenu(false);
         }
     }));
-
-    const showMenu = (pageX, pageY, data) => {
-        setXPos(`${pageX}px`);
-        setYPos(`${pageY}px`);
-        setShowMenu(true);
-    }
-
-
-
-    useEffect(() => {
-    },);
 
     return (
         <div className={'context-menu' + " " + (isShow ? "show" : "")}>

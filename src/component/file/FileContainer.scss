@@ -3,6 +3,8 @@
   justify-content: start;
   padding: 20px 0;
   flex-wrap: wrap;
+  column-gap: 10px;
+  row-gap: 10px;
 
   & p {
     font-size: 1.5rem;

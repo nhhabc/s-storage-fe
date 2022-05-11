@@ -1,5 +1,5 @@
 import FormFileInput from "./FormFileInput";
-import {useState} from "react";
+import {useRef, useState} from "react";
 import Button from "../../layout/Button";
 import {useParams} from "react-router-dom";
 import {useEffect} from "react";
@@ -9,18 +9,13 @@ import "./FileContainer.scss";
 import {downloadFile} from "../../util";
 
 const FileContainer = (props) => {
-    const [contextMenuId, setContextMenuId] = useState(null)
-    const [fileFormShow, setFileFormShow] = useState(false);
+    const contextMenuRef = useRef()
     const [files, setFiles] = useState([]);
     const params = useParams()
     const parentId = params.folderId;
 
-    const showFileInputForm = () => {
-        setFileFormShow(true)
-    }
-
     const hideFileForm = () => {
-        setFileFormShow(false)
+        props.hideForm()
     }
 
     useEffect(() => {
@@ -37,10 +32,24 @@ const FileContainer = (props) => {
         }
     }, [parentId]);
 
+    const handleContextMenuClick = (e, data) => {
+        e.preventDefault()
+        e.stopPropagation()
+        contextMenuRef.current.showMenu(e.pageX, e.pageY, data)
+    }
+
+    useEffect(() => {
+        document.addEventListener("click", () => contextMenuRef.current.hideMenu());
+        return () => {
+            document.removeEventListener("click", () => contextMenuRef.current.hideMenu());
+        };
+    })
+
     const addFile = (file) => {
         const fileDetail = {
             name: file.name,
             img: require('../../assets/text-logo.png'),
+            path: file.path,
             _parentFolder: params.folderId,
             _id: file._id
         }
@@ -56,17 +65,17 @@ const FileContainer = (props) => {
 
     const CustomMenu = (props) => {
         const deleteFile = () => {
-            httpClient.delete('/file/' + props.file._id)
+            httpClient.delete('/file/' + props.id)
                 .then(res => console.log(res))
 
-            props.onDelete(props.file._id)
+            props.onDelete(props.id)
         }
 
         const download = () => {
-            httpClient.get('/file/' + props.file._id, {
+            httpClient.get('/file/' + props.id, {
                 responseType: "blob"
             })
-                .then(res => downloadFile(res.data, props.file.name))
+                .then(res => downloadFile(res.data, props.name))
         }
 
         return (
@@ -77,21 +86,14 @@ const FileContainer = (props) => {
         );
     }
 
-    const showContextMenu = (id) => {
-        setContextMenuId(id);
-    }
-
     return (
         <div>
             <div className="file-container">
                 <p className="title">All files:</p>
                 {files.map((item, index) => {
                     return (
-                        <ContextMenu
-                            menu={<CustomMenu folderId={item._parentFolder} onDelete={deleteFile} file={item}/>}
-                            key={index} tabIndex={index} itemId={item._id} showId={contextMenuId}
-                            onShow={() => showContextMenu(item._id)}>
-                            <div className="menu-item">
+                            <div className="menu-item" onContextMenu={(e) =>
+                                handleContextMenuClick(e, {menu: <CustomMenu onDelete={() => deleteFile(item._id)} id={item._id}/>})} key={index}>
                                 <div className="menu-image">
                                     <img src={require('../../assets/text-logo.png')} alt={item.name}/>
                                 </div>
@@ -99,13 +101,12 @@ const FileContainer = (props) => {
                                     {item.name}
                                 </div>
                             </div>
-                        </ContextMenu>
                     )
                 })}
 
             </div>
-
-            {fileFormShow && <FormFileInput folderId={parentId} closeForm={hideFileForm} onAddFile={addFile}/>}
+            <ContextMenu ref={contextMenuRef}/>
+            {props.showForm && <FormFileInput folderId={parentId} closeForm={hideFileForm} onAddFile={addFile}/>}
         </div>
     )
 }

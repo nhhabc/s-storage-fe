@@ -10,7 +10,8 @@ import {ReactComponent as FolderIcon} from "../../assets/folder-ico.svg";
 
 const FolderContainer = () => {
     const contextMenuRef = useRef(null)
-    const [showForm, setShowForm] = useState(false)
+    const [showFolderForm, setShowFolderForm] = useState(false)
+    const [showFileForm, setShowFileForm] = useState(false)
     const [listFolder, setListFolder] = useState([])
     const params = useParams()
     const folderId = params.folderId;
@@ -28,10 +29,12 @@ const FolderContainer = () => {
     }, [folderId]);
 
     useEffect(() => {
-        document.addEventListener("click", () => contextMenuRef.current.hideMenu());
-        return () => {
-            document.removeEventListener("click", () => contextMenuRef.current.hideMenu());
-        };
+        if (contextMenuRef.current) {
+            document.addEventListener("click", () => contextMenuRef.current.hideMenu());
+            return () => {
+                document.removeEventListener("click", () => contextMenuRef.current.hideMenu());
+            };
+        }
     })
 
     const addFolderFunction = (item) => {
@@ -54,7 +57,7 @@ const FolderContainer = () => {
     }
 
     const closeFormFunction = () => {
-        setShowForm(false)
+        setShowFolderForm(false)
     }
 
     const deleteFolder = (id) => {
@@ -64,7 +67,6 @@ const FolderContainer = () => {
     const handleContextMenuClick = (e, data) => {
         e.preventDefault();
         e.stopPropagation()
-        console.log("121212")
         contextMenuRef.current.showMenu(e.pageX, e.pageY, data);
     }
 
@@ -84,34 +86,32 @@ const FolderContainer = () => {
         );
     }
 
+    const setFileFormShow = () => {
+        setShowFileForm(true)
+    }
+    const setFileFormHide = () => {
+        setShowFileForm(false)
+    }
+
     const CustomMenuFolderContainer = (props) => {
         return (
             <ul className="context-menu-item">
-                <li>Create</li>
-            </ul>
-        );
-    }
-
-    const OptionMenu = (props) => {
-        return (
-            <ul className="context-menu-item">
-                <li>Create</li>
-                <li>Delete</li>
+                <li onClick={() => setShowFolderForm(true)}>Create folder</li>
+                <li onClick={setFileFormShow}>Create file</li>
             </ul>
         );
     }
 
     return (
-        <div className='cover'>
-            <div className='folder-container'
-                 onContextMenu={(e) => handleContextMenuClick(e, {menu: <CustomMenuFolderContainer/>})}>
+        <div className='cover' onContextMenu={(e) => handleContextMenuClick(e, {menu: <CustomMenuFolderContainer/>})}>
+            <div className='folder-container'>
                 <p className="folder-container__menu">All folder:</p>
                 {listFolder.map((item, index) => {
                     return (
                         <Link to={`/folder/${item._id}`} className='folder-container__item'
                               onContextMenu={(e) => handleContextMenuClick(e, {
-                                  menu: <CustomMenu onDelete={() => deleteFolder(item._id)}/>, id: item._id
-                              })}>
+                                  menu: <CustomMenu onDelete={() => deleteFolder(item._id)} id={item._id}/>
+                              })} key={index}>
                             <FolderIcon className='folder-container__icon'/>
                             <p>{item.name}</p>
                         </Link>
@@ -119,8 +119,8 @@ const FolderContainer = () => {
                 })}
             </div>
             <hr/>
-            <FileContainer/>
-            {showForm &&
+            <FileContainer showForm={showFileForm} hideForm={setFileFormHide}/>
+            {showFolderForm &&
             <AddFolderForm closeForm={closeFormFunction} addFolder={addFolderFunction} listFolder={listFolder}/>}
             <ContextMenu ref={contextMenuRef}/>
         </div>
