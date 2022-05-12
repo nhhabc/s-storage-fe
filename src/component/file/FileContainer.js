@@ -56,7 +56,6 @@ const FileContainer = (props) => {
             _id: file._id
         }
 
-        console.log(fileDetail)
         setFiles(files => [...files, fileDetail])
     }
 
