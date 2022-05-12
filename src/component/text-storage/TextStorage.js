@@ -2,10 +2,12 @@ import './TextStorage.js';
 import './TextStorage.scss';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faArrowRight} from '@fortawesome/free-solid-svg-icons'
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import httpClient from "../../api/http-client";
+import {ContextMenu} from "../context-menu/ContextMenu";
 
 function TextStorage() {
+    const contextMenuRef = useRef()
 
     const [messages, setMessages] = useState([]);
     const [msgText, setMsgText] = useState("");
@@ -15,6 +17,21 @@ function TextStorage() {
             setMessages(res.data.messages)
         })
     }, []);
+
+    const handleContextMenuClick = (e, data) => {
+        e.preventDefault();
+        e.stopPropagation()
+        contextMenuRef.current.showMenu(e.pageX, e.pageY, data);
+    }
+
+    useEffect(() => {
+        if (contextMenuRef.current) {
+            document.addEventListener("click", () => contextMenuRef.current.hideMenu());
+            return () => {
+                document.removeEventListener("click", () => contextMenuRef.current.hideMenu());
+            };
+        }
+    })
 
     const onSent = () => {
         if (msgText.trim().length === 0) return;
@@ -44,6 +61,15 @@ function TextStorage() {
         }
     }
 
+    const CustomMenu = (props) => {
+
+        return (
+            <ul className="context-menu-item">
+                <li>Delete</li>
+            </ul>
+        );
+    }
+
     return (
         <div className="msg-wrapper">
             <div className="msg">
@@ -52,7 +78,8 @@ function TextStorage() {
                         messages && messages.length === 0 ? <></> : messages.map((msg, index) => {
                             return (
                                 <div className="msg-text" key={index}>
-                                    <span className="text">{msg.text}</span>
+                                    <span className="text"  onContextMenu={(e) =>
+                                        handleContextMenuClick(e, {menu: CustomMenu})}>{msg.text}</span>
                                 </div>
                             )
                         })
@@ -67,6 +94,7 @@ function TextStorage() {
                     </div>
                 </div>
             </div>
+            <ContextMenu ref={contextMenuRef}/>
         </div>
     );
 }

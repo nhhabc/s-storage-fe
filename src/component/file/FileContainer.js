@@ -30,6 +30,8 @@ const FileContainer = (props) => {
                     setFiles(res.data.data.file)
                 });
         }
+
+        console.log(files)
     }, [parentId]);
 
     const handleContextMenuClick = (e, data) => {
@@ -55,7 +57,6 @@ const FileContainer = (props) => {
         }
 
         console.log(fileDetail)
-
         setFiles(files => [...files, fileDetail])
     }
 
@@ -68,7 +69,7 @@ const FileContainer = (props) => {
             httpClient.delete('/file/' + props.id)
                 .then(res => console.log(res))
 
-            props.onDelete(props.id)
+            props.onDelete()
         }
 
         const download = () => {
