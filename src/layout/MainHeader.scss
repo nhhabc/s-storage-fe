@@ -27,7 +27,8 @@
             border-right: 1px solid #E8F9FD;
         }
 
-        &:hover {
+        &:hover,
+        &.active {
             background-color: #7FB5FF;
             color: #E8F9FD;
         }

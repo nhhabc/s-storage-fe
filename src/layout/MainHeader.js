@@ -1,11 +1,11 @@
-import { Link } from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
 import './MainHeader.scss'
 
 const MainHeader = () => {
     return (
         <div className='nav'>
-                <Link to='/folder'><p>Folder</p></Link>
-                <Link to='/msg'><p>Message</p></Link>
+            <NavLink activeClassName='active' to='/folder'><p>Folder</p></NavLink>
+            <NavLink activeClassName='active' to='/msg'><p>Message</p></NavLink>
         </div>
     )
 }
