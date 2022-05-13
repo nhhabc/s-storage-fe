@@ -20,6 +20,7 @@
     border: 2px solid #fff;
     border-radius: 8px;
     color: #fff;
+    white-space: nowrap;
 
     .menu-image {
       padding: 10px;
@@ -35,6 +36,7 @@
       border-top: 2px solid #fff;
       text-align: center;
       overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 }

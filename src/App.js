@@ -1,5 +1,4 @@
-import './App.css';
-import FileContainer from "./component/file/FileContainer";
+import './App.scss';
 import FolderContainer from "./component/folder/FolderContainer";
 import {Route, Routes} from "react-router-dom";
 import TextStorage from './component/text-storage/TextStorage';

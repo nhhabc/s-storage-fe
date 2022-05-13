@@ -30,8 +30,6 @@ const FileContainer = (props) => {
                     setFiles(res.data.data.file)
                 });
         }
-
-        console.log(files)
     }, [parentId]);
 
     const handleContextMenuClick = (e, data) => {
@@ -41,11 +39,20 @@ const FileContainer = (props) => {
     }
 
     useEffect(() => {
-        document.addEventListener("click", () => contextMenuRef.current.hideMenu());
-        return () => {
-            document.removeEventListener("click", () => contextMenuRef.current.hideMenu());
-        };
-    })
+            document.addEventListener("click", () => {
+                if (contextMenuRef.current) {
+                    contextMenuRef.current.hideMenu();
+                }
+            });
+            return () => {
+                document.removeEventListener("click", () => {
+                    if (contextMenuRef.current) {
+                        contextMenuRef.current.hideMenu()
+                    }
+                });
+            }
+        }
+    )
 
     const addFile = (file) => {
         const fileDetail = {
@@ -92,15 +99,17 @@ const FileContainer = (props) => {
                 <p className="title">All files:</p>
                 {files.map((item, index) => {
                     return (
-                            <div className="menu-item" onContextMenu={(e) =>
-                                handleContextMenuClick(e, {menu: <CustomMenu onDelete={() => deleteFile(item._id)} id={item._id}/>})} key={index}>
-                                <div className="menu-image">
-                                    <img src={require('../../assets/text-logo.png')} alt={item.name}/>
-                                </div>
-                                <div className="menu-title">
-                                    {item.name}
-                                </div>
+                        <div className="menu-item" onContextMenu={(e) =>
+                            handleContextMenuClick(e, {
+                                menu: <CustomMenu onDelete={() => deleteFile(item._id)} name={item.name} id={item._id}/>
+                            })} key={index}>
+                            <div className="menu-image">
+                                <img src={require('../../assets/text-logo.png')} alt={item.name}/>
                             </div>
+                            <div className="menu-title">
+                                {item.name}
+                            </div>
+                        </div>
                     )
                 })}
 

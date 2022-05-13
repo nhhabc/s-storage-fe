@@ -25,13 +25,21 @@ function TextStorage() {
     }
 
     useEffect(() => {
-        if (contextMenuRef.current) {
-            document.addEventListener("click", () => contextMenuRef.current.hideMenu());
+            document.addEventListener("click", () => {
+                if (contextMenuRef.current) {
+                    contextMenuRef.current.hideMenu()
+                }
+            });
+
             return () => {
-                document.removeEventListener("click", () => contextMenuRef.current.hideMenu());
+                document.removeEventListener("click", () => {
+                    if (contextMenuRef.current) {
+                        contextMenuRef.current.hideMenu()
+                    }
+                });
             };
         }
-    })
+    )
 
     const onSent = () => {
         if (msgText.trim().length === 0) return;
@@ -61,11 +69,21 @@ function TextStorage() {
         }
     }
 
+    const deleteTextHandle = (id) => {
+        setMessages(texts => texts.filter(msg => msg._id !== id))
+    }
+
     const CustomMenu = (props) => {
+        const deleteText = () => {
+            httpClient.delete('/msg/' + props.id)
+                .then(res => console.log(res))
+
+            props.onDelete()
+        }
 
         return (
             <ul className="context-menu-item">
-                <li>Delete</li>
+                <li onClick={deleteText}>Delete</li>
             </ul>
         );
     }
@@ -78,8 +96,8 @@ function TextStorage() {
                         messages && messages.length === 0 ? <></> : messages.map((msg, index) => {
                             return (
                                 <div className="msg-text" key={index}>
-                                    <span className="text"  onContextMenu={(e) =>
-                                        handleContextMenuClick(e, {menu: CustomMenu})}>{msg.text}</span>
+                                    <span className="msg-text__text" onContextMenu={(e) =>
+                                        handleContextMenuClick(e, {menu: <CustomMenu onDelete={() => deleteTextHandle(msg._id)} id={msg._id}/>})}>{msg.text}</span>
                                 </div>
                             )
                         })

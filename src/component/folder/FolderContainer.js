@@ -29,12 +29,21 @@ const FolderContainer = () => {
     }, [folderId]);
 
     useEffect(() => {
-        if (contextMenuRef.current) {
-            document.addEventListener("click", () => contextMenuRef.current.hideMenu());
-            return () => {
-                document.removeEventListener("click", () => contextMenuRef.current.hideMenu());
-            };
-        }
+
+        document.addEventListener("click", () => {
+            if (contextMenuRef.current) {
+                contextMenuRef.current.hideMenu()
+            }
+        });
+
+        return () => {
+            document.removeEventListener("click", () => {
+                if (contextMenuRef.current) {
+                    contextMenuRef.current.hideMenu()
+                }
+            });
+
+        };
     })
 
     const addFolderFunction = (item) => {
