@@ -43,20 +43,15 @@ function TextStorage() {
 
     const onSent = () => {
         if (msgText.trim().length === 0) return;
-        const newMsg = {
-            _id: null,
-            text: msgText.trim(),
-            createdDate: new Date()
-        }
         setMsgText("");
-        setMessages([...messages, newMsg]);
+
 
         // Save to server
         httpClient.post('/msg', {
             msg: msgText,
         })
             .then(function (response) {
-                console.log(response);
+                setMessages(msg => [...msg, response.data.data])
             })
             .catch(function (error) {
                 console.log(error);
@@ -97,7 +92,9 @@ function TextStorage() {
                             return (
                                 <div className="msg-text" key={index}>
                                     <span className="msg-text__text" onContextMenu={(e) =>
-                                        handleContextMenuClick(e, {menu: <CustomMenu onDelete={() => deleteTextHandle(msg._id)} id={msg._id}/>})}>{msg.text}</span>
+                                        handleContextMenuClick(e, {
+                                            menu: <CustomMenu onDelete={() => deleteTextHandle(msg._id)} id={msg._id}/>
+                                        })}>{msg.text}</span>
                                 </div>
                             )
                         })
