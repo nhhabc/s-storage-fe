@@ -4,7 +4,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faArrowRight} from '@fortawesome/free-solid-svg-icons'
 import {useEffect, useRef, useState} from "react";
 import httpClient from "../../api/http-client";
-import {ContextMenu} from "../context-menu/ContextMenu";
+import {ContextMenu} from "../store/ContextMenu";
 
 function TextStorage() {
     const contextMenuRef = useRef()
@@ -13,7 +13,7 @@ function TextStorage() {
     const [msgText, setMsgText] = useState("");
 
     useEffect(() => {
-        httpClient.get("/msg").then(res => {
+        httpClient.get('/msg').then(res => {
             setMessages(res.data.messages)
         })
     }, []);
@@ -72,7 +72,6 @@ function TextStorage() {
         const deleteText = () => {
             httpClient.delete('/msg/' + props.id)
                 .then(res => console.log(res))
-
             props.onDelete()
         }
 

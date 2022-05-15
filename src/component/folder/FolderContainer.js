@@ -5,7 +5,7 @@ import httpClient from "../../api/http-client";
 import {useEffect} from 'react';
 import {Link, useParams} from "react-router-dom";
 import FileContainer from "../file/FileContainer";
-import {ContextMenu} from "../context-menu/ContextMenu";
+import {ContextMenu} from "../store/ContextMenu";
 import {ReactComponent as FolderIcon} from "../../assets/folder-ico.svg";
 
 const FolderContainer = () => {

@@ -10,12 +10,10 @@
     z-index: 100;
 
 
-    & a {
+    & a:not(:last-child) {
         height: 100%;
-        display: block;
         padding: 0 20px;
         color: #0AA1DD;
-        display: inline-block;
         text-decoration: none;
         font-size: 20px;
         text-transform: uppercase;
@@ -32,5 +30,27 @@
             background-color: #7FB5FF;
             color: #E8F9FD;
         }
-    }   
+    }
+
+    & a:last-child,
+    & button {
+        margin-left: auto;
+        margin-right: 20px;
+        border: none;
+        cursor: pointer;
+        padding: 10px 20px;
+        border-radius: 10px;
+        background-color: #B3E8E5;
+        transition: .3s all;
+
+        &:hover {
+            background-color: #2F8F9D;
+            transform: translateY(-3px);
+            color: white;
+        }
+
+        &:active {
+            transform: translateY(-1px);
+        }
+    }
 }  

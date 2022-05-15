@@ -4,7 +4,7 @@ import Button from "../../layout/Button";
 import {useParams} from "react-router-dom";
 import {useEffect} from "react";
 import httpClient from "../../api/http-client";
-import {ContextMenu} from "../context-menu/ContextMenu";
+import {ContextMenu} from "../store/ContextMenu";
 import "./FileContainer.scss";
 import {downloadFile} from "../../util";
 

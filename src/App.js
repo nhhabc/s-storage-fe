@@ -1,11 +1,17 @@
 import './App.scss';
 import FolderContainer from "./component/folder/FolderContainer";
 import {Route, Routes, Navigate} from "react-router-dom";
+import {useContext} from "react";
+import AuthContext from "./component/store/AuthContext";
 import TextStorage from './component/text-storage/TextStorage';
 import MainHeader from './layout/MainHeader';
-import LogIn from "./component/log-in/LogIn";
+import AuthForm from "./component/log-in/AuthForm";
+import Welcome from "./layout/Welcome";
 
 function App() {
+    const authCtx = useContext(AuthContext)
+    const isLoggedIn = authCtx.isLoggedIn;
+
     return (
         <div className="App">
             <MainHeader />
@@ -13,12 +19,13 @@ function App() {
             <Routes>
                 <Route
                     path="*"
-                    element={<Navigate to="/login" replace />}
+                    element={<Navigate to="/welcome" replace />}
                 />
-                <Route path='/login' element={<LogIn/>}/>
-                <Route path='/folder' element={<FolderContainer/>}/>
-                <Route path='/folder/:folderId' element={<FolderContainer/>}/>
-                <Route path='/msg' element={<TextStorage/>}/>
+                {!isLoggedIn && <Route path='/login' element={<AuthForm/>}/>}
+                <Route path='/welcome' element={<Welcome/>}/>
+                {isLoggedIn && <Route path='/folder' element={<FolderContainer/>}/>}
+                {isLoggedIn && <Route path='/folder/:folderId' element={<FolderContainer/>}/>}
+                {isLoggedIn && <Route path='/msg' element={<TextStorage/>}/>}
             </Routes>
             </main>
         </div>
