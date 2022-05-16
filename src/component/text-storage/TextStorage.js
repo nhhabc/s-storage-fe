@@ -1,10 +1,9 @@
 import './TextStorage.js';
 import './TextStorage.scss';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faArrowRight} from '@fortawesome/free-solid-svg-icons'
 import {useEffect, useRef, useState} from "react";
 import httpClient from "../../api/http-client";
 import {ContextMenu} from "../store/ContextMenu";
+import {ReactComponent as SendIcon} from "../../assets/send-img.svg";
 
 function TextStorage() {
     const contextMenuRef = useRef()
@@ -101,10 +100,10 @@ function TextStorage() {
 
                 </div>
                 <div className="msg-input">
-                    <input type="text" className="msg-text-input" value={msgText} onKeyDown={e => handleKeyDown(e)}
+                    <input type="text" className="msg-input__text" value={msgText} onKeyDown={e => handleKeyDown(e)}
                            onChange={e => setMsgText(e.target.value)}/>
-                    <div className="msg-send-btn" onClick={onSent}>
-                        <FontAwesomeIcon icon={faArrowRight}/>
+                    <div className="msg-input__send" onClick={onSent}>
+                        <SendIcon className="msg-input__send-ico"></SendIcon>
                     </div>
                 </div>
             </div>

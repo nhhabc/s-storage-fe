@@ -12,12 +12,15 @@ const AuthForm = () => {
     const [isLogin, setIsLogin] = useState(true);
     const [inputUsername, setInputUserName] = useState('')
     const [inputPassword, setInputPassword] = useState('')
+    const [isError, setIsError] = useState(false)
+    const [errorMsg, setErrorMsg] = useState('')
 
     const [isLoading, setIsLoading] = useState(false)
 
 
     const switchAuthModeHandler = () => {
         setIsLogin((prevState) => !prevState);
+        setIsError(false)
     };
 
     const submitHandler = (e) => {
@@ -39,7 +42,8 @@ const AuthForm = () => {
                     authCtx.login(data.data.token)
                     navigate('/welcome')
                 } catch (err) {
-                    alert('Incorrect username or password')
+                    setIsError(true)
+                    setErrorMsg('Incorrect username or password')
                 }
                 setIsLoading(false)
             })()
@@ -53,7 +57,8 @@ const AuthForm = () => {
                         const data = await res;
                         setIsLogin(true)
                     } catch (err) {
-                        alert('Invalid username or password')
+                        setIsError(true)
+                        setErrorMsg('Invalid  username or password')
                     }
                 setIsLoading(false)
             })()
@@ -71,10 +76,8 @@ const AuthForm = () => {
                 <div className="form-group">
                     <KeyIcon className="form-user-icon"></KeyIcon>
                     <input type="password" className="form-input" placeholder="Password" onChange={(e) => setInputPassword(e.target.value)}/>
-                        <div id="eye">
-                            <i className="far fa-eye"/>
-                        </div>
                 </div>
+                {!isLoading && isError && <div className='error'>{errorMsg}</div>}
                 {!isLoading && <input type="submit" value={`${isLogin ? 'Login' : 'Create Account'}`} className="form-submit"/>}
                 {isLoading && <p>Sending request ...</p>}
                 <button type='button' className='toggle' onClick={switchAuthModeHandler}>

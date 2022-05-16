@@ -7,6 +7,7 @@
 
   .msg {
     border: 2px solid #fff;
+    width: 100%;
     max-width: 500px;
     padding: 15px;
 
@@ -54,12 +55,13 @@
       width: 100%;
       display: flex;
       position: relative;
+      justify-content: center;
       margin-top: 15px;
       border: 2px solid white;
       border-radius: 30px;
 
-      .msg-text-input {
-        width: 90%;
+      &__text {
+        width: 85%;
         outline: none;
         background: transparent;
         padding: 10px;
@@ -69,15 +71,21 @@
 
       }
 
-      .msg-send-btn {
+      &__send {
         color: #4bff50;
-        position: absolute;
         top: 8px;
         right: 15px;
-        border: 2px solid #4bff50;
+        border: 2px solid #2F8F9D;
         padding: 0 3px 0 3px;
-        border-radius: 30px;
+        border-radius: 50%;
         cursor: pointer;
+        display: flex;
+        justify-content: center;
+
+        &-ico {
+          width: 25px;
+          fill: white;
+        }
       }
     }
   }
