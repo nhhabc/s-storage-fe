@@ -10,7 +10,6 @@ import UserService from "./services/UserService";
 function App() {
 
     const isLoggedIn = UserService.isAuthenticated();
-    console.log(UserService.get())
 
     return (
         <div className="App">

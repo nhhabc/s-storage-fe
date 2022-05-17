@@ -38,6 +38,7 @@ const AuthForm = () => {
                     })
                     const data = await res
                     UserService.login(data.token)
+                    window.location.reload();
                     navigate('/welcome')
                 } catch (err) {
                     setIsError(true)
@@ -54,7 +55,7 @@ const AuthForm = () => {
                             password: passwordInputValue
                         })
                         const data = await res;
-                        setIsLogin(true)
+                        window.location.reload();
                     } catch (err) {
                         setIsError(true)
                         setErrorMsg('Invalid  username or password')

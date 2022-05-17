@@ -35,7 +35,7 @@ class UserService {
     }
 
     isAuthenticated() {
-        return this.user != null;
+        return !!this.user;
     }
 
     subscribe(listenerFunc) {

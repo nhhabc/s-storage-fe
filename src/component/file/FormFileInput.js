@@ -1,6 +1,6 @@
 import './FormInput.scss'
-import httpClient from "../../api/http-client";
 import {useState} from 'react';
+import FileApi from "../../api/FileApi";
 
 const FormFileInput = (props) => {
     const [selectedFile, setSelectedFile] = useState({});
@@ -20,7 +20,7 @@ const FormFileInput = (props) => {
         }
         formData.append('file', selectedFile);
 
-        httpClient.post('/file', formData)
+        FileApi.createFile(formData)
             .then(function (res) {
                 props.onAddFile(res.file)
             })

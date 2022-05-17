@@ -19,8 +19,8 @@ const FolderContainer = () => {
 
     useEffect(() => {
         if (folderId) {
-            httpClient.get("/folder/" + folderId).then(res => {
-                setListFolder(res.data.folder)
+            FolderApi.getChildrenFolder(folderId).then(res => {
+                setListFolder(res.folder)
             })
         } else {
             FolderApi.getRootFolder().then(res => setListFolder(res.folder));
@@ -48,12 +48,9 @@ const FolderContainer = () => {
     const addFolderFunction = (item) => {
         if (item.name.trim() === 0) return;
         // Save to server
-        httpClient.post('/folder', {
-            name: item.name,
-            _parentId: folderId ? folderId : null,
-        })
+        FolderApi.createFolder(item, folderId)
             .then(function (response) {
-                const newFolder = response.data.folder;
+                const newFolder = response.folder;
                 setListFolder(items => {
                     return [...items, newFolder]
                 })
@@ -79,7 +76,7 @@ const FolderContainer = () => {
 
     const CustomMenu = (props) => {
         const deleteFolder = () => {
-            httpClient.delete('/folder/' + props.id)
+            FolderApi.deleteFolder(props.id)
                 .then(res => console.log(res))
 
             props.onDelete(props.id)

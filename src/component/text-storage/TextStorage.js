@@ -13,7 +13,7 @@ function TextStorage() {
 
     useEffect(() => {
         httpClient.get('/msg').then(res => {
-            setMessages(res.data.messages)
+            setMessages(res.messages)
         })
     }, []);
 
@@ -50,7 +50,7 @@ function TextStorage() {
             msg: msgText,
         })
             .then(function (response) {
-                setMessages(msg => [...msg, response.data.data])
+                setMessages(msg => [...msg, response.message])
             })
             .catch(function (error) {
                 console.log(error);
@@ -70,7 +70,7 @@ function TextStorage() {
     const CustomMenu = (props) => {
         const deleteText = () => {
             httpClient.delete('/msg/' + props.id)
-                .then(res => console.log(res))
+                .then()
             props.onDelete()
         }
 

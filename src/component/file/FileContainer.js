@@ -20,13 +20,12 @@ const FileContainer = (props) => {
 
     useEffect(() => {
         if (parentId) {
-            httpClient.get('/file?folderId=' + parentId)
+            FileApi.getChildrenFile(parentId)
                 .then(res => {
-                    setFiles(res.data.data.file)
+                    setFiles(res.file)
                 });
         } else {
             FileApi.getRootFile().then(res => {
-                console.log(res)
                 setFiles(res.file)
             })
         }
@@ -62,8 +61,6 @@ const FileContainer = (props) => {
             _parentFolder: params.folderId,
             _id: file._id,
         }
-        console.log(fileDetail)
-        console.log(files)
 
         setFiles(files => [...files, fileDetail])
     }
@@ -74,17 +71,15 @@ const FileContainer = (props) => {
 
     const CustomMenu = (props) => {
         const deleteFile = () => {
-            httpClient.delete('/file/' + props.id)
+            FileApi.deleteFile(props.id)
                 .then(res => console.log(res))
 
             props.onDelete()
         }
 
         const download = () => {
-            httpClient.get('/file/' + props.id, {
-                responseType: "blob"
-            })
-                .then(res => downloadFile(res.data, props.name))
+            FileApi.downloadFileHandle(props.id)
+                .then(res => downloadFile(res, props.name))
         }
 
         return (
