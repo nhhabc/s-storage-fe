@@ -1,16 +1,16 @@
 import './App.scss';
 import FolderContainer from "./component/folder/FolderContainer";
 import {Route, Routes, Navigate} from "react-router-dom";
-import {useContext} from "react";
-import AuthContext from "./component/store/AuthContext";
 import TextStorage from './component/text-storage/TextStorage';
 import MainHeader from './layout/MainHeader';
 import AuthForm from "./component/log-in/AuthForm";
 import Welcome from "./layout/Welcome";
+import UserService from "./services/UserService";
 
 function App() {
-    const authCtx = useContext(AuthContext)
-    const isLoggedIn = authCtx.isLoggedIn;
+
+    const isLoggedIn = UserService.isAuthenticated();
+    console.log(UserService.get())
 
     return (
         <div className="App">

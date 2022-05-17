@@ -4,11 +4,10 @@ import './AuthForm.scss'
 import {ReactComponent as KeyIcon} from "../../assets/key.svg";
 import {ReactComponent as UserIcon} from "../../assets/user.svg";
 import httpClient from "../../api/http-client";
-import AuthContext from "../store/AuthContext";
+import UserService from "../../services/UserService";
 
 const AuthForm = () => {
     const navigate = useNavigate()
-    const authCtx = useContext(AuthContext)
     const [isLogin, setIsLogin] = useState(true);
     const [inputUsername, setInputUserName] = useState('')
     const [inputPassword, setInputPassword] = useState('')
@@ -38,11 +37,11 @@ const AuthForm = () => {
                         password: passwordInputValue
                     })
                     const data = await res
-                    console.log(data)
-                    authCtx.login(data.data.token)
+                    UserService.login(data.token)
                     navigate('/welcome')
                 } catch (err) {
                     setIsError(true)
+                    console.log(err)
                     setErrorMsg('Incorrect username or password')
                 }
                 setIsLoading(false)

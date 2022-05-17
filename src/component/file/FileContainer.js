@@ -1,12 +1,12 @@
 import FormFileInput from "./FormFileInput";
 import {useRef, useState} from "react";
-import Button from "../../layout/Button";
 import {useParams} from "react-router-dom";
 import {useEffect} from "react";
 import httpClient from "../../api/http-client";
-import {ContextMenu} from "../store/ContextMenu";
+import {ContextMenu} from "../context-menu/ContextMenu";
 import "./FileContainer.scss";
 import {downloadFile} from "../../util";
+import FileApi from "../../api/FileApi";
 
 const FileContainer = (props) => {
     const contextMenuRef = useRef()
@@ -25,10 +25,10 @@ const FileContainer = (props) => {
                     setFiles(res.data.data.file)
                 });
         } else {
-            httpClient.get('/file/root')
-                .then(res => {
-                    setFiles(res.data.data.file)
-                });
+            FileApi.getRootFile().then(res => {
+                console.log(res)
+                setFiles(res.file)
+            })
         }
     }, [parentId]);
 
@@ -60,8 +60,10 @@ const FileContainer = (props) => {
             img: require('../../assets/text-logo.png'),
             path: file.path,
             _parentFolder: params.folderId,
-            _id: file._id
+            _id: file._id,
         }
+        console.log(fileDetail)
+        console.log(files)
 
         setFiles(files => [...files, fileDetail])
     }
@@ -97,7 +99,7 @@ const FileContainer = (props) => {
         <div>
             <div className="file-container">
                 <p className="title">All files:</p>
-                {files.map((item, index) => {
+                {files && files.map((item, index) => {
                     return (
                         <div className="menu-item" onContextMenu={(e) =>
                             handleContextMenuClick(e, {

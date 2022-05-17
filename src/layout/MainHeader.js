@@ -1,16 +1,13 @@
 import {NavLink, useNavigate} from 'react-router-dom';
 import './MainHeader.scss'
-import {useContext} from "react";
-import AuthContext from "../component/store/AuthContext";
-
+import UserService from "../services/UserService";
 
 const MainHeader = () => {
-    const authCtx = useContext(AuthContext);
-    const isLoggedIn = authCtx.isLoggedIn;
+    const isLoggedIn = UserService.isAuthenticated();
     const navigate = useNavigate()
 
     const logoutHandler = () => {
-        authCtx.logout()
+        UserService.logout()
         navigate('/login')
     }
 

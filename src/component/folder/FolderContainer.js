@@ -5,8 +5,9 @@ import httpClient from "../../api/http-client";
 import {useEffect} from 'react';
 import {Link, useParams} from "react-router-dom";
 import FileContainer from "../file/FileContainer";
-import {ContextMenu} from "../store/ContextMenu";
+import {ContextMenu} from "../context-menu/ContextMenu";
 import {ReactComponent as FolderIcon} from "../../assets/folder-ico.svg";
+import FolderApi from "../../api/FolderApi";
 
 const FolderContainer = () => {
     const contextMenuRef = useRef(null)
@@ -22,9 +23,7 @@ const FolderContainer = () => {
                 setListFolder(res.data.folder)
             })
         } else {
-            httpClient.get("/folder/root").then(res => {
-                setListFolder(res.data.folder)
-            })
+            FolderApi.getRootFolder().then(res => setListFolder(res.folder));
         }
     }, [folderId]);
 
@@ -48,7 +47,6 @@ const FolderContainer = () => {
 
     const addFolderFunction = (item) => {
         if (item.name.trim() === 0) return;
-
         // Save to server
         httpClient.post('/folder', {
             name: item.name,

@@ -14,6 +14,19 @@
         height: 45px;
     }
 
+    @media only screen and (max-width: 400px) {
+        flex-direction: column;
+        height: auto;
+        text-align: center;
+
+        &>*:not(:last-child) {
+            justify-content: center;
+            width: 100%;
+            height: 30px;
+            border-bottom: 1px solid whitesmoke;
+        }
+    }
+
     &__options {
         display: flex;
         flex-direction: row;

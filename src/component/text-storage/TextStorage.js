@@ -2,7 +2,7 @@ import './TextStorage.js';
 import './TextStorage.scss';
 import {useEffect, useRef, useState} from "react";
 import httpClient from "../../api/http-client";
-import {ContextMenu} from "../store/ContextMenu";
+import {ContextMenu} from "../context-menu/ContextMenu";
 import {ReactComponent as SendIcon} from "../../assets/send-img.svg";
 
 function TextStorage() {

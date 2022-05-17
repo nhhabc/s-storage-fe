@@ -22,7 +22,7 @@ const FormFileInput = (props) => {
 
         httpClient.post('/file', formData)
             .then(function (res) {
-                props.onAddFile(res.data.file)
+                props.onAddFile(res.file)
             })
             .catch(function (error) {
                 console.log(error);
