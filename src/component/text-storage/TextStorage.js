@@ -4,12 +4,33 @@ import {useEffect, useRef, useState} from "react";
 import httpClient from "../../api/http-client";
 import {ContextMenu} from "../context-menu/ContextMenu";
 import {ReactComponent as SendIcon} from "../../assets/send-img.svg";
+import { w3cwebsocket as W3CWebSocket } from "websocket";
+
+const URL = 'ws://127.0.0.1:3098/wss';
+const client = new W3CWebSocket(URL);
+client.onopen = () => {
+    console.log('WebSocket Client Connected');
+};
+
+client.onclose = () => {
+    console.log('WebSocket Client Disconnected');
+};
+
+client.onmessage = (message) => {
+    console.log(message);
+};
 
 function TextStorage() {
     const contextMenuRef = useRef()
-
+    const [user, setUser] = useState('')
     const [messages, setMessages] = useState([]);
     const [msgText, setMsgText] = useState("");
+
+    useEffect(() => {
+        httpClient.get('/user').then(res => {
+            setUser(res.user.username)
+        })
+    }, []);
 
     useEffect(() => {
         httpClient.get('/msg').then(res => {
@@ -42,8 +63,11 @@ function TextStorage() {
 
     const onSent = () => {
         if (msgText.trim().length === 0) return;
-        setMsgText("");
+        const message = {user, msgText}
+        client.send(JSON.stringify(message))
 
+
+        setMsgText("");
 
         // Save to server
         httpClient.post('/msg', {

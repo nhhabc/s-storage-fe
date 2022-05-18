@@ -22,11 +22,15 @@ const FileContainer = (props) => {
         if (parentId) {
             FileApi.getChildrenFile(parentId)
                 .then(res => {
-                    setFiles(res.file)
+                    if (res.file) {
+                        setFiles(res.file)
+                    }
                 });
         } else {
             FileApi.getRootFile().then(res => {
-                setFiles(res.file)
+                if (res.file) {
+                    setFiles(res.file)
+                }
             })
         }
     }, [parentId]);

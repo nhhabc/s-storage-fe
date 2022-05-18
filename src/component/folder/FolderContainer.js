@@ -110,7 +110,7 @@ const FolderContainer = () => {
         <div className='cover' onContextMenu={(e) => handleContextMenuClick(e, {menu: <CustomMenuFolderContainer/>})}>
             <div className='folder-container'>
                 <p className="folder-container__menu">All folder:</p>
-                {listFolder.map((item, index) => {
+                {listFolder && listFolder.map((item, index) => {
                     return (
                         <Link to={`/folder/${item._id}`} className='folder-container__item'
                               onContextMenu={(e) => handleContextMenuClick(e, {
