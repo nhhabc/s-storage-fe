@@ -1,29 +1,34 @@
 import './FolderContainer.scss'
 import AddFolderForm from "./AddFolderForm";
 import {useRef, useState} from "react";
-import httpClient from "../../api/http-client";
 import {useEffect} from 'react';
 import {Link, useParams} from "react-router-dom";
 import FileContainer from "../file/FileContainer";
 import {ContextMenu} from "../context-menu/ContextMenu";
 import {ReactComponent as FolderIcon} from "../../assets/folder-ico.svg";
 import FolderApi from "../../api/FolderApi";
+import SearchBar from "../../layout/SearchBar";
+import {useDispatch, useSelector} from "react-redux";
+import {storageAction} from "../../store/storage-slice";
 
 const FolderContainer = () => {
     const contextMenuRef = useRef(null)
     const [showFolderForm, setShowFolderForm] = useState(false)
     const [showFileForm, setShowFileForm] = useState(false)
-    const [listFolder, setListFolder] = useState([])
     const params = useParams()
     const folderId = params.folderId;
+    const dispatch = useDispatch()
+    const folderList = useSelector((state) => state.storage.folders)
 
     useEffect(() => {
         if (folderId) {
             FolderApi.getChildrenFolder(folderId).then(res => {
-                setListFolder(res.folder)
+                dispatch(storageAction.getAllFolder(res.folder))
             })
         } else {
-            FolderApi.getRootFolder().then(res => setListFolder(res.folder));
+            FolderApi.getRootFolder().then(res => {
+                dispatch(storageAction.getAllFolder(res.folder))
+            });
         }
     }, [folderId]);
 
@@ -51,9 +56,7 @@ const FolderContainer = () => {
         FolderApi.createFolder(item, folderId)
             .then(function (response) {
                 const newFolder = response.folder;
-                setListFolder(items => {
-                    return [...items, newFolder]
-                })
+                dispatch(storageAction.addFolder(newFolder))
             })
             .catch(function (error) {
                 console.log(error);
@@ -65,7 +68,8 @@ const FolderContainer = () => {
     }
 
     const deleteFolder = (id) => {
-        setListFolder(folders => folders.filter(folder => folder._id !== id))
+        console.log(id)
+        dispatch(storageAction.deleteFolder(id))
     }
 
     const handleContextMenuClick = (e, data) => {
@@ -79,7 +83,7 @@ const FolderContainer = () => {
             FolderApi.deleteFolder(props.id)
                 .then(res => console.log(res))
 
-            props.onDelete(props.id)
+            props.onDelete()
         }
 
         return (
@@ -108,14 +112,15 @@ const FolderContainer = () => {
 
     return (
         <div className='cover' onContextMenu={(e) => handleContextMenuClick(e, {menu: <CustomMenuFolderContainer/>})}>
+            <SearchBar/>
             <div className='folder-container'>
                 <p className="folder-container__menu">All folder:</p>
-                {listFolder && listFolder.map((item, index) => {
+                {folderList.map((item, i) => {
                     return (
                         <Link to={`/folder/${item._id}`} className='folder-container__item'
                               onContextMenu={(e) => handleContextMenuClick(e, {
                                   menu: <CustomMenu onDelete={() => deleteFolder(item._id)} id={item._id}/>
-                              })} key={index}>
+                              })} key={i}>
                             <FolderIcon className='folder-container__icon'/>
                             <p>{item.name}</p>
                         </Link>
@@ -125,7 +130,7 @@ const FolderContainer = () => {
             <hr/>
             <FileContainer showForm={showFileForm} hideForm={setFileFormHide}/>
             {showFolderForm &&
-            <AddFolderForm closeForm={closeFormFunction} addFolder={addFolderFunction} listFolder={listFolder}/>}
+            <AddFolderForm closeForm={closeFormFunction} addFolder={addFolderFunction}/>}
             <ContextMenu ref={contextMenuRef}/>
         </div>
     )

@@ -1,18 +1,20 @@
 import FormFileInput from "./FormFileInput";
-import {useRef, useState} from "react";
+import {useRef} from "react";
 import {useParams} from "react-router-dom";
 import {useEffect} from "react";
-import httpClient from "../../api/http-client";
 import {ContextMenu} from "../context-menu/ContextMenu";
 import "./FileContainer.scss";
 import {downloadFile} from "../../util";
 import FileApi from "../../api/FileApi";
+import {useDispatch, useSelector} from "react-redux";
+import {storageAction} from "../../store/storage-slice";
 
 const FileContainer = (props) => {
     const contextMenuRef = useRef()
-    const [files, setFiles] = useState([]);
+    const dispatch = useDispatch()
     const params = useParams()
     const parentId = params.folderId;
+    const fileList = useSelector((state) => state.storage.files)
 
     const hideFileForm = () => {
         props.hideForm()
@@ -22,18 +24,16 @@ const FileContainer = (props) => {
         if (parentId) {
             FileApi.getChildrenFile(parentId)
                 .then(res => {
-                    if (res.file) {
-                        setFiles(res.file)
-                    }
+                    dispatch(storageAction.getAllFile(res.file))
                 });
         } else {
             FileApi.getRootFile().then(res => {
                 if (res.file) {
-                    setFiles(res.file)
+                    dispatch(storageAction.getAllFile(res.file))
                 }
             })
         }
-    }, [parentId]);
+    }, []);
 
     const handleContextMenuClick = (e, data) => {
         e.preventDefault()
@@ -65,12 +65,11 @@ const FileContainer = (props) => {
             _parentFolder: params.folderId,
             _id: file._id,
         }
-
-        setFiles(files => [...files, fileDetail])
+        dispatch(storageAction.addFile(fileDetail))
     }
 
     const deleteFile = (id) => {
-        setFiles(files => files.filter(file => file._id !== id))
+        dispatch(storageAction.deleteFile(id))
     }
 
     const CustomMenu = (props) => {
@@ -98,7 +97,7 @@ const FileContainer = (props) => {
         <div>
             <div className="file-container">
                 <p className="title">All files:</p>
-                {files && files.map((item, index) => {
+                {fileList.map((item, index) => {
                     return (
                         <div className="menu-item" onContextMenu={(e) =>
                             handleContextMenuClick(e, {

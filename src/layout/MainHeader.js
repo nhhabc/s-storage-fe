@@ -1,7 +1,6 @@
 import {NavLink, useNavigate} from 'react-router-dom';
 import './MainHeader.scss'
 import UserService from "../services/UserService";
-import {useState} from "react";
 
 
 const MainHeader = () => {

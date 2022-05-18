@@ -1,0 +1,22 @@
+.search {
+  display: flex;
+  height: 30px;
+  margin-bottom: 40px;
+  justify-content: center;
+  align-content: center;
+
+  &__icon {
+    width: 20px;
+    height: inherit;
+    margin-right: -30px;
+    z-index: 2;
+    fill: #7F8487;
+  }
+
+  &__input {
+    border-radius: 30px;
+    padding-left: 35px;
+    outline: none;
+    border: none;
+  }
+}

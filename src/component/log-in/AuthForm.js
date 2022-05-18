@@ -1,4 +1,4 @@
-import React, {useState, useContext} from "react";
+import React, {useState} from "react";
 import { useNavigate } from 'react-router-dom';
 import './AuthForm.scss'
 import {ReactComponent as KeyIcon} from "../../assets/key.svg";
@@ -54,7 +54,6 @@ const AuthForm = () => {
                             username: userInputValue,
                             password: passwordInputValue
                         })
-                        const data = await res;
                         window.location.reload();
                     } catch (err) {
                         setIsError(true)
