@@ -19,7 +19,7 @@ const storageSlice = createSlice({
         onSearchChange(state, action) {
             state.searchfield = action.payload;
             state.folders = state.folders.filter(items => {
-                return items.name.toLowerCase().includes(state.searchfield.toLowerCase())
+                return items.name.toLowerCase().includes(action.payload.toLowerCase())
             })
             state.files = state.files.filter(items => {
                 return items.name.toLowerCase().includes(state.searchfield.toLowerCase())

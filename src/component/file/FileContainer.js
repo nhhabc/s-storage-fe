@@ -28,9 +28,7 @@ const FileContainer = (props) => {
                 });
         } else {
             FileApi.getRootFile().then(res => {
-                if (res.file) {
                     dispatch(storageAction.getAllFile(res.file))
-                }
             })
         }
     }, []);
