@@ -29,7 +29,7 @@ const AuthForm = () => {
     const submitHandler = (e) => {
         e.preventDefault()
 
-        const userInputValue = inputUsername;
+        const userInputValue = inputUsername.toLowerCase();
         const passwordInputValue = inputPassword;
 
         setIsLoading(true)
