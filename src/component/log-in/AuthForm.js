@@ -5,6 +5,10 @@ import {ReactComponent as KeyIcon} from "../../assets/key.svg";
 import {ReactComponent as UserIcon} from "../../assets/user.svg";
 import httpClient from "../../api/http-client";
 import UserService from "../../services/UserService";
+import {ReactComponent as FbIcon} from "../../assets/fb-ico.svg";
+import {ReactComponent as GGIcon} from "../../assets/google-ico.svg";
+import {ReactComponent as TwitterIcon} from "../../assets/twitter-ico.svg";
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 
 const AuthForm = () => {
     const navigate = useNavigate()
@@ -64,6 +68,17 @@ const AuthForm = () => {
         }
     }
 
+    const responseFacebook = (response) => {
+        console.log(response);
+        UserService.login(response.accessToken)
+        if (response.accessToken) {
+            window.location.reload();
+            navigate('/welcome')
+        } else {
+            setErrorMsg('Cannot connect with your facebook acount')
+        }
+    }
+
     return (
         <div className="wrapper">
             <form action="" className="form-login" onSubmit={submitHandler}>
@@ -82,6 +97,17 @@ const AuthForm = () => {
                 <button type='button' className='toggle' onClick={switchAuthModeHandler}>
                     {isLogin ? 'Create new account' : 'Login with existing account'}
                 </button>
+                <div className='form-login__media'>
+                    <FacebookLogin
+                        appId="557164842420625"
+                        callback={responseFacebook}
+                        render={renderProps => (
+                            <FbIcon onClick={renderProps.onClick} className='form-login__media-fb'></FbIcon>
+                        )}
+                    />
+                    <GGIcon className='form-login__media-google'></GGIcon>
+                    <TwitterIcon className='form-login__media-twitter'></TwitterIcon>
+                </div>
             </form>
         </div>
     )

@@ -20,6 +20,44 @@
     max-width: 250px;
     margin: 20px;
   }
+
+  &__media {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &>* {
+      fill: #EFEFEF;
+      cursor: pointer;
+      height: 100%;
+      transition: all .3s;
+    }
+
+    &>*:hover {
+      transform: translateY(-3px);
+    }
+
+    &>*:active {
+      transform: translateY(-1px);
+    }
+
+    &-fb:hover {
+      fill: #4267B2;
+    }
+
+    &-twitter:hover {
+      fill: #1DA1F2;
+    }
+
+    &-google:hover {
+      fill: #F4B400;
+    }
+
+    &>*:not(:last-child) {
+      margin-right: 10px;
+    }
+  }
 }
 
 .form-heading {

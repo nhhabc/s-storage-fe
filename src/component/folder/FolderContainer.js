@@ -10,7 +10,6 @@ import FolderApi from "../../api/FolderApi";
 import SearchBar from "../../layout/SearchBar";
 import {useDispatch, useSelector} from "react-redux";
 import {storageAction} from "../../store/storage-slice";
-import FileApi from "../../api/FileApi";
 
 const FolderContainer = () => {
     const contextMenuRef = useRef(null)
@@ -20,7 +19,6 @@ const FolderContainer = () => {
     const folderId = params.folderId;
     const dispatch = useDispatch()
     const folderList = useSelector((state) => state.storage.folders)
-    // const search = useSelector((state) => state.storage.searchfield)
 
     useEffect(() => {
         if (folderId) {
