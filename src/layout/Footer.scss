@@ -1,0 +1,36 @@
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #73777B;
+  color: #F1EEE9;
+  flex-direction: column;
+  font-size: 13px;
+
+  &__copyright {
+    padding: 10px;
+    color: #383838;
+
+    & a,
+    & a:visited{
+      text-decoration: none;
+      color: #F1EEE9;
+      transition: all .3s;
+    }
+
+    & a:hover {
+      background-color: #F1EEE9;
+      color: #413F42;
+    }
+  }
+
+  &__logo {
+    font-family: 'Lobster', cursive;
+    font-size: 25px;
+    padding-bottom: 10px;
+    cursor: pointer;
+  }
+}

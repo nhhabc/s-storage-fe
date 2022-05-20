@@ -6,6 +6,7 @@ import MainHeader from './layout/MainHeader';
 import AuthForm from "./component/log-in/AuthForm";
 import Welcome from "./layout/Welcome";
 import UserService from "./services/UserService";
+import Footer from "./layout/Footer";
 
 function App() {
 
@@ -27,6 +28,7 @@ function App() {
                 {isLoggedIn && <Route path='/msg' element={<TextStorage/>}/>}
             </Routes>
             </main>
+            <Footer/>
         </div>
     );
 }

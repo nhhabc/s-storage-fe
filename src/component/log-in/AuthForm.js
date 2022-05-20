@@ -57,7 +57,7 @@ const AuthForm = () => {
         } else {
             (async () => {
                     try {
-                        const res = httpClient.post('/signup', {
+                         await httpClient.post('/signup', {
                             username: userInputValue,
                             password: passwordInputValue
                         })
@@ -72,7 +72,6 @@ const AuthForm = () => {
     }
 
     const responseFacebook = async (response) => {
-        console.log(response);
         UserService.login(response.accessToken)
         if (response.accessToken) {
             const { isExist } = await UserApi.checkUsername(response.email);
@@ -88,7 +87,7 @@ const AuthForm = () => {
         }
     }
 
-    const responseGoogle = async (res) => {
+    const responseGoogle = (res) => {
         console.log(res)
     }
 
@@ -112,7 +111,7 @@ const AuthForm = () => {
                 </button>
                 <div className='form-login__media'>
                     <FacebookLogin
-                        appId="557164842420625"
+                        appId={process.env.REACT_APP_FACEBOOK_CLIENT_ID}
                         callback={responseFacebook}
                         fields="email,name"
                         render={renderProps => (
