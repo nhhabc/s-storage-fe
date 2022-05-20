@@ -15,6 +15,7 @@ const FileContainer = (props) => {
     const params = useParams()
     const parentId = params.folderId;
     const fileList = useSelector((state) => state.storage.files)
+    const filteredFilesList = useSelector((state) => state.storage.filteredFiles)
 
     const hideFileForm = () => {
         props.hideForm()
@@ -95,7 +96,7 @@ const FileContainer = (props) => {
         <div>
             <div className="file-container">
                 <p className="title">All files:</p>
-                {fileList.map((item, index) => {
+                {filteredFilesList.map((item, index) => {
                     return (
                         <div className="menu-item" onContextMenu={(e) =>
                             handleContextMenuClick(e, {

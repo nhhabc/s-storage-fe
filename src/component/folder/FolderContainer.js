@@ -18,7 +18,7 @@ const FolderContainer = () => {
     const params = useParams()
     const folderId = params.folderId;
     const dispatch = useDispatch()
-    const folderList = useSelector((state) => state.storage.folders)
+    const filteredFolderList = useSelector((state) => state.storage.filteredFolders)
 
     useEffect(() => {
         if (folderId) {
@@ -116,7 +116,7 @@ const FolderContainer = () => {
             <SearchBar/>
             <div className='folder-container'>
                 <p className="folder-container__menu">All folder:</p>
-                {folderList.map((item, i) => {
+                {filteredFolderList.map((item, i) => {
                     return (
                         <Link to={`/folder/${item._id}`} className='folder-container__item'
                               onContextMenu={(e) => handleContextMenuClick(e, {

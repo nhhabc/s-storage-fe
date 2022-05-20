@@ -9,6 +9,9 @@ import {ReactComponent as FbIcon} from "../../assets/fb-ico.svg";
 import {ReactComponent as GGIcon} from "../../assets/google-ico.svg";
 import {ReactComponent as TwitterIcon} from "../../assets/twitter-ico.svg";
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
+import GoogleLogin from 'react-google-login';
+import UserApi from "../../api/UserApi";
+import {SocialType} from "../../model/social-type";
 
 const AuthForm = () => {
     const navigate = useNavigate()
@@ -68,15 +71,25 @@ const AuthForm = () => {
         }
     }
 
-    const responseFacebook = (response) => {
+    const responseFacebook = async (response) => {
         console.log(response);
         UserService.login(response.accessToken)
         if (response.accessToken) {
+            const { isExist } = await UserApi.checkUsername(response.email);
+            if (!isExist) {
+                await UserApi.socialSignup({ email: response.email, socialType: SocialType.FACEBOOK })
+            }
+            const data = await UserApi.loginSocial({ email: response.email, socialType: SocialType.FACEBOOK })
+            UserService.login(data.token)
             window.location.reload();
             navigate('/welcome')
         } else {
-            setErrorMsg('Cannot connect with your facebook acount')
+            setErrorMsg('Cannot connect with your facebook account')
         }
+    }
+
+    const responseGoogle = async (res) => {
+        console.log(res)
     }
 
     return (
@@ -101,12 +114,21 @@ const AuthForm = () => {
                     <FacebookLogin
                         appId="557164842420625"
                         callback={responseFacebook}
+                        fields="email,name"
                         render={renderProps => (
-                            <FbIcon onClick={renderProps.onClick} className='form-login__media-fb'></FbIcon>
+                            <FbIcon onClick={renderProps.onClick} className='form-login__media-fb'/>
                         )}
                     />
-                    <GGIcon className='form-login__media-google'></GGIcon>
-                    <TwitterIcon className='form-login__media-twitter'></TwitterIcon>
+                    <GoogleLogin
+                        clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+                        render={renderProps => (
+                            <GGIcon onClick={renderProps.onClick} className='form-login__media-google'/>
+                            )}
+                        onSuccess={responseGoogle}
+                        onFailure={responseGoogle}
+                    />
+                    {/*<GGIcon className='form-login__media-google'/>*/}
+                    <TwitterIcon className='form-login__media-twitter'/>
                 </div>
             </form>
         </div>
