@@ -3,4 +3,8 @@
   font-size: 3rem;
   letter-spacing: 3px;
   font-family: 'Great Vibes', cursive;
+
+  @media only screen and (max-width: 600px) {
+    font-size: 2rem;
+  }
 }

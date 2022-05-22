@@ -12,12 +12,12 @@ const storageSlice = createSlice({
     reducers: {
         getAllFile(state, action) {
             state.files = action.payload
-            state.filteredFiles = action.payload
+            state.filteredFiles = state.files
         },
 
         getAllFolder(state, action) {
             state.folders = action.payload
-            state.filteredFolders = action.payload
+            state.filteredFolders = state.folders
         },
 
         onSearchChange(state, action) {
@@ -35,20 +35,24 @@ const storageSlice = createSlice({
         addFolder(state, action) {
             const newFolder = action.payload;
             state.folders.push(newFolder);
+            state.filteredFolders = state.folders
         },
         addFile(state, action) {
             const newFile = action.payload;
             state.files.push(newFile)
+            state.filteredFiles = state.files
         },
 
         deleteFolder(state, action) {
             const folderId = action.payload
             state.folders = state.folders.filter(folder => folder._id !== folderId)
+            state.filteredFolders = state.folders
         },
 
         deleteFile(state, action) {
             const fileId = action.payload
             state.files = state.files.filter(file => file._id !== fileId)
+            state.filteredFiles = state.files
         }
 
     }

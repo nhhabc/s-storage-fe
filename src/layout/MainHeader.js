@@ -1,16 +1,23 @@
 import {NavLink, useNavigate} from 'react-router-dom';
 import './MainHeader.scss'
 import UserService from "../services/UserService";
+import io from 'socket.io-client';
+import UserApi from "../api/UserApi";
 
+const socket = io('localhost:3098/', {transports: ['websocket']})
 
 const MainHeader = () => {
     const isLoggedIn = UserService.isAuthenticated();
     const navigate = useNavigate()
 
-    const logoutHandler = () => {
+    const logoutHandler = async () => {
+        const res = await UserApi.getUser()
+
+        socket.emit('Disconnect', {username: res.user.username})
         UserService.logout()
         window.location.reload();
         navigate('/login')
+
     }
 
     return (

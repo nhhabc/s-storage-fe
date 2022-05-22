@@ -1,6 +1,10 @@
 import httpClient from "./http-client";
 
 export default {
+    getUser(){
+        return httpClient.get('/user')
+    },
+
     checkUsername(username) {
         if (!username) return false;
         return httpClient.get('/check/username?u=' + username)
@@ -12,5 +16,19 @@ export default {
 
     loginSocial(body) {
         return httpClient.post('/login/social', body);
+    },
+
+    userLogin(user, pass) {
+        return httpClient.post('/login', {
+            username: user,
+            password: pass
+        })
+    },
+
+    userSignup (user, pass) {
+        return httpClient.post('/signup', {
+            username: user,
+            password: pass
+        })
     }
 }

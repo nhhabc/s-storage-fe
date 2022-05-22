@@ -1,97 +1,104 @@
 .nav {
-    box-sizing: border-box;
-    position: fixed;
-    display: flex;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
-    height: 65px;
-    background-color: #79DAE8;
-    z-index: 100;
-    justify-content: space-between;
+  box-sizing: border-box;
+  position: fixed;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  height: 65px;
+  background-color: #79DAE8;
+  z-index: 100;
+  justify-content: space-between;
+  flex-wrap: wrap;
 
-    @media only screen and (max-width: 600px) {
-        height: 45px;
-    }
+  @media only screen and (max-width: 600px) {
+    height: 45px;
+  }
+
+  @media only screen and (max-width: 400px) {
+    height: fit-content;
+  }
+
+  &__options {
+    display: flex;
+    flex-direction: row;
+    height: inherit;
 
     @media only screen and (max-width: 400px) {
-        flex-direction: column;
-        height: auto;
-        text-align: center;
-
-        &>*:not(:last-child) {
-            justify-content: center;
-            width: 100%;
-            height: 30px;
-            border-bottom: 1px solid whitesmoke;
-        }
+      order: 1;
+      margin: 0 auto;
     }
 
-    &__options {
-        display: flex;
-        flex-direction: row;
-        height: 100%;
+    & a {
+      height: 100%;
+      padding: 0 20px;
+      color: #0AA1DD;
+      text-decoration: none;
+      font-size: 20px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      transition: all .3s;
 
-        & a {
-            height: 100%;
-            padding: 0 20px;
-            color: #0AA1DD;
-            text-decoration: none;
-            font-size: 20px;
-            text-transform: uppercase;
-            display: flex;
-            align-items: center;
-            transition: all .3s;
+      @media only screen and (max-width: 600px) {
+        font-size: 15px;
+      }
 
-            @media only screen and (max-width: 600px) {
-                font-size: 15px;
-            }
+      @media only screen and (max-width: 400px) {
+        font-size: 15px;
+        padding: 10px;
+        font-size: 10px;
+      }
 
-            &:not(:last-child) {
-                border-right: 1px solid #E8F9FD;
-            }
+      &:not(:last-child) {
+        border-right: 1px solid #E8F9FD;
+      }
 
-            &:hover,
-            &.active {
-                background-color: #7FB5FF;
-                color: #E8F9FD;
-            }
-        }
-    }
-
-    &__logo {
-        font-family: 'Lobster', cursive;
-        font-size: 2rem;
+      &:hover,
+      &.active {
+        background-color: #7FB5FF;
         color: #E8F9FD;
-        margin-left: 20px;
-        cursor: pointer;
+      }
+    }
+  }
 
-        @media only screen and (max-width: 600px) {
-            font-size: 20px;
-        }
+  &__logo {
+    font-family: 'Lobster', cursive;
+    font-size: 2rem;
+    color: #E8F9FD;
+    margin-left: 20px;
+    cursor: pointer;
+
+    @media only screen and (max-width: 600px) {
+      font-size: 20px;
+    }
+  }
+
+  & button {
+    margin-right: 20px;
+    border: none;
+    cursor: pointer;
+    padding: 10px 20px;
+    border-radius: 10px;
+    background-color: #B3E8E5;
+    transition: .3s all;
+
+    @media only screen and (max-width: 400px) {
+      transform: scale(.7);
     }
 
-    & button {
-        margin-right: 20px;
-        border: none;
-        cursor: pointer;
-        padding: 10px 20px;
-        border-radius: 10px;
-        background-color: #B3E8E5;
-        transition: .3s all;
-
-        @media only screen and (max-width: 600px) {
-            font-size: 10px;
-        }
-
-        &:hover {
-            background-color: #2F8F9D;
-            transform: translateY(-3px);
-            color: white;
-        }
-
-        &:active {
-            transform: translateY(-1px);
-        }
+    @media only screen and (max-width: 600px) {
+      font-size: 10px;
     }
-}  
+
+    &:hover {
+      background-color: #2F8F9D;
+      transform: translateY(-3px);
+      color: white;
+    }
+
+    &:active {
+      transform: translateY(-1px);
+    }
+  }
+}

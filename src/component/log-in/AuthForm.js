@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import './AuthForm.scss'
 import {ReactComponent as KeyIcon} from "../../assets/key.svg";
 import {ReactComponent as UserIcon} from "../../assets/user.svg";
-import httpClient from "../../api/http-client";
 import UserService from "../../services/UserService";
 import {ReactComponent as FbIcon} from "../../assets/fb-ico.svg";
 import {ReactComponent as GGIcon} from "../../assets/google-ico.svg";
@@ -39,12 +38,10 @@ const AuthForm = () => {
         if (isLogin) {
             (async () => {
                 try {
-                    const res = httpClient.post('/login', {
-                        username: userInputValue,
-                        password: passwordInputValue
-                    })
+                    const res = UserApi.userLogin(userInputValue, passwordInputValue)
                     const data = await res
                     UserService.login(data.token)
+                    console.log(res.user)
                     window.location.reload();
                     navigate('/welcome')
                 } catch (err) {
@@ -57,10 +54,7 @@ const AuthForm = () => {
         } else {
             (async () => {
                     try {
-                         await httpClient.post('/signup', {
-                            username: userInputValue,
-                            password: passwordInputValue
-                        })
+                        await UserApi.userSignup(userInputValue, passwordInputValue)
                         window.location.reload();
                     } catch (err) {
                         setIsError(true)

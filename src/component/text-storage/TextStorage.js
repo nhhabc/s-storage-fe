@@ -4,32 +4,41 @@ import {useEffect, useRef, useState} from "react";
 import httpClient from "../../api/http-client";
 import {ContextMenu} from "../context-menu/ContextMenu";
 import {ReactComponent as SendIcon} from "../../assets/send-img.svg";
-import { w3cwebsocket as W3CWebSocket } from "websocket";
+// import {w3cwebsocket as W3CWebSocket} from "websocket";
+import io from 'socket.io-client';
 
-const URL = 'ws://127.0.0.1:3098/wss';
-const client = new W3CWebSocket(URL);
-client.onopen = () => {
-    console.log('WebSocket Client Connected');
-};
+const socket = io('localhost:3098/', {transports: ['websocket']})
 
-client.onclose = () => {
-    console.log('WebSocket Client Disconnected');
-};
-
-client.onmessage = (message) => {
-    console.log(message);
-};
+// const URL = 'ws://127.0.0.1:3098/wss';
+// const client = new W3CWebSocket(URL);
+// client.onopen = () => {
+//     console.log('WebSocket Client Connected');
+// };
+//
+// client.onclose = () => {
+//     console.log('WebSocket Client Disconnected');
+// };
+//
+// client.onmessage = (message) => {
+//     console.log(message);
+// };
 
 function TextStorage() {
     const contextMenuRef = useRef()
     const [user, setUser] = useState('')
     const [messages, setMessages] = useState([]);
     const [msgText, setMsgText] = useState("");
+    let isSentByCurrentUser = false;
 
     useEffect(() => {
-        httpClient.get('/user').then(res => {
-            setUser(res.user.username)
-        })
+        (async () => {
+            try {
+                const res = await httpClient.get('/user')
+                setUser(res.user.username)
+            } catch (err) {
+                console.log(err)
+            }
+        })()
     }, []);
 
     useEffect(() => {
@@ -60,18 +69,14 @@ function TextStorage() {
             };
         }
     )
-
     const onSent = () => {
         if (msgText.trim().length === 0) return;
-        const message = {user, msgText}
-        client.send(JSON.stringify(message))
-
-
-        setMsgText("");
+        // client.send(JSON.stringify(message))
 
         // Save to server
         httpClient.post('/msg', {
             msg: msgText,
+            username: user
         })
             .then(function (response) {
                 setMessages(msg => [...msg, response.message])
@@ -79,7 +84,16 @@ function TextStorage() {
             .catch(function (error) {
                 console.log(error);
             });
+
+        socket.emit('sendMessage', {msgText, user})
+        setMsgText("")
     }
+
+    useEffect(() => {
+        socket.on('message', data => {
+            console.log(data)
+        })
+    }, [socket])
 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
@@ -112,11 +126,13 @@ function TextStorage() {
                     {
                         messages && messages.length === 0 ? <></> : messages.map((msg, index) => {
                             return (
-                                <div className="msg-text" key={index}>
-                                    <span className="msg-text__text" onContextMenu={(e) =>
-                                        handleContextMenuClick(e, {
-                                            menu: <CustomMenu onDelete={() => deleteTextHandle(msg._id)} id={msg._id}/>
-                                        })}>{msg.text}</span>
+                                <div className="msg-text" key={index} onContextMenu={(e) =>
+                                    handleContextMenuClick(e, {
+                                        menu: <CustomMenu onDelete={() => deleteTextHandle(msg._id)} id={msg._id}/>
+                                    })}>
+                                    <div className='msg-text__wrap'>
+                                    <p className="msg-text__text" >{msg.user}: {msg.text}</p>
+                                    </div>
                                 </div>
                             )
                         })
@@ -124,7 +140,8 @@ function TextStorage() {
 
                 </div>
                 <div className="msg-input">
-                    <input type="text" className="msg-input__text" value={msgText} onKeyDown={e => handleKeyDown(e)}
+                    <input type="text" className="msg-input__text" placeholder='Enter a message...' value={msgText}
+                           onKeyDown={e => handleKeyDown(e)}
                            onChange={e => setMsgText(e.target.value)}/>
                     <div className="msg-input__send" onClick={onSent}>
                         <SendIcon className="msg-input__send-ico"></SendIcon>

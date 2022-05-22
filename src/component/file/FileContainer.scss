@@ -13,6 +13,10 @@
     padding-right: 10px;
     order: -1;
     flex: 1 0 100%;
+
+    @media only screen and (max-width: 600px) {
+      font-size: 15px;
+    }
   }
 
   .menu-item {
@@ -21,6 +25,12 @@
     border-radius: 8px;
     color: #fff;
     white-space: nowrap;
+
+    @media only screen and (max-width: 600px) {
+      transform: scale(.5);
+      margin-left: -25px;
+      margin-top: -40px;
+    }
 
     .menu-image {
       padding: 10px;
