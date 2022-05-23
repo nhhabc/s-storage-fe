@@ -7,8 +7,9 @@ import {ReactComponent as SendIcon} from "../../assets/send-img.svg";
 // import {w3cwebsocket as W3CWebSocket} from "websocket";
 import io from 'socket.io-client';
 
-const socket = io('localhost:3098/', {transports: ['websocket']})
+const socket = io('localhost:3098/', {transports: ['websocket']});
 
+let isSentByCurrentUser;
 // const URL = 'ws://127.0.0.1:3098/wss';
 // const client = new W3CWebSocket(URL);
 // client.onopen = () => {
@@ -28,18 +29,23 @@ function TextStorage() {
     const [user, setUser] = useState('')
     const [messages, setMessages] = useState([]);
     const [msgText, setMsgText] = useState("");
-    let isSentByCurrentUser = false;
 
     useEffect(() => {
-        (async () => {
-            try {
-                const res = await httpClient.get('/user')
-                setUser(res.user.username)
-            } catch (err) {
-                console.log(err)
-            }
-        })()
-    }, []);
+        httpClient.get('/user').then(res => {
+            setUser(res.user.username)
+        })
+    }, [])
+
+    // useEffect(() => {
+    //     (async () => {
+    //         try {
+    //             const res = await httpClient.get('/user')
+    //             setUser(res.user.username)
+    //         } catch (err) {
+    //             console.log(err)
+    //         }
+    //     })()
+    // }, []);
 
     useEffect(() => {
         httpClient.get('/msg').then(res => {
@@ -79,21 +85,23 @@ function TextStorage() {
             username: user
         })
             .then(function (response) {
-                setMessages(msg => [...msg, response.message])
+                socket.emit('sendMessage', (response.message))
             })
             .catch(function (error) {
                 console.log(error);
             });
 
-        socket.emit('sendMessage', {msgText, user})
         setMsgText("")
     }
 
     useEffect(() => {
-        socket.on('message', data => {
-            console.log(data)
+        socket.on('message', (data) => {
+            if (data.user !== user) {
+                isSentByCurrentUser = false
+            }
+            setMessages(msg => [...msg, data])
         })
-    }, [socket])
+    },[socket])
 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
@@ -124,17 +132,19 @@ function TextStorage() {
             <div className="msg">
                 <div className="msg-box">
                     {
-                        messages && messages.length === 0 ? <></> : messages.map((msg, index) => {
-                            return (
-                                <div className="msg-text" key={index} onContextMenu={(e) =>
-                                    handleContextMenuClick(e, {
-                                        menu: <CustomMenu onDelete={() => deleteTextHandle(msg._id)} id={msg._id}/>
-                                    })}>
-                                    <div className='msg-text__wrap'>
-                                    <p className="msg-text__text" >{msg.user}: {msg.text}</p>
+                        messages.map((msg, index) => {
+                                return (
+                                    <div className="msg-text" id={`${msg.user !== user && 'right'}`} key={index}
+                                         onContextMenu={(e) =>
+                                             handleContextMenuClick(e, {
+                                                 menu: <CustomMenu onDelete={() => deleteTextHandle(msg._id)}
+                                                                   id={msg._id}/>
+                                             })}>
+                                        <div className='msg-text__wrap'>
+                                            <p className="msg-text__text">{msg.user}: {msg.text}</p>
+                                        </div>
                                     </div>
-                                </div>
-                            )
+                                )
                         })
                     }
 

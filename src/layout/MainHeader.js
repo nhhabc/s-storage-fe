@@ -16,8 +16,7 @@ const MainHeader = () => {
         socket.emit('Disconnect', {username: res.user.username})
         UserService.logout()
         window.location.reload();
-        navigate('/login')
-
+        navigate('/login');
     }
 
     return (

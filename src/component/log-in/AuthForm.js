@@ -11,6 +11,9 @@ import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props
 import GoogleLogin from 'react-google-login';
 import UserApi from "../../api/UserApi";
 import {SocialType} from "../../model/social-type";
+import io from 'socket.io-client';
+
+const socket = io('localhost:3098/', {transports: ['websocket']})
 
 const AuthForm = () => {
     const navigate = useNavigate()
@@ -41,7 +44,7 @@ const AuthForm = () => {
                     const res = UserApi.userLogin(userInputValue, passwordInputValue)
                     const data = await res
                     UserService.login(data.token)
-                    console.log(res.user)
+                    socket.emit('join', {username: userInputValue})
                     window.location.reload();
                     navigate('/welcome')
                 } catch (err) {
