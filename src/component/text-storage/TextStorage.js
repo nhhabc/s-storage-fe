@@ -9,7 +9,6 @@ import io from 'socket.io-client';
 
 const socket = io('localhost:3098/', {transports: ['websocket']});
 
-let isSentByCurrentUser;
 // const URL = 'ws://127.0.0.1:3098/wss';
 // const client = new W3CWebSocket(URL);
 // client.onopen = () => {
@@ -96,9 +95,6 @@ function TextStorage() {
 
     useEffect(() => {
         socket.on('message', (data) => {
-            if (data.user !== user) {
-                isSentByCurrentUser = false
-            }
             setMessages(msg => [...msg, data])
         })
     },[socket])
