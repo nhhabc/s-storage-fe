@@ -4,7 +4,7 @@ import UserService from "../services/UserService";
 import io from 'socket.io-client';
 import UserApi from "../api/UserApi";
 
-const socket = io('localhost:3098/', {transports: ['websocket']})
+const socket = io(process.env.SOCKET_IO_DOMAIN_SERVICE || 'localhost:3098/', {transports: ['websocket']})
 
 const MainHeader = () => {
     const isLoggedIn = UserService.isAuthenticated();
