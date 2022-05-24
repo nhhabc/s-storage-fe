@@ -13,7 +13,7 @@ import UserApi from "../../api/UserApi";
 import {SocialType} from "../../model/social-type";
 import io from 'socket.io-client';
 
-const socket = io(process.env.SOCKET_IO_DOMAIN_SERVICE, {transports: ['websocket']})
+const socket = io(process.env.REACT_APP_SOCKET_IO_DOMAIN, {path: "/socket/socket.io"}, {transports: ['websocket']})
 
 const AuthForm = () => {
     const navigate = useNavigate()
