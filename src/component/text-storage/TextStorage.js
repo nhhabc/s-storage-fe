@@ -7,7 +7,7 @@ import {ReactComponent as SendIcon} from "../../assets/send-img.svg";
 // import {w3cwebsocket as W3CWebSocket} from "websocket";
 import io from 'socket.io-client';
 
-const socket = io(process.env.SOCKET_IO_DOMAIN_SERVICE || 'localhost:3098/', {transports: ['websocket']});
+const socket = io(process.env.SOCKET_IO_DOMAIN_SERVICE, {transports: ['websocket']});
 
 // const URL = 'ws://127.0.0.1:3098/wss';
 // const client = new W3CWebSocket(URL);
