@@ -5,9 +5,14 @@ import httpClient from "../../api/http-client";
 import {ContextMenu} from "../context-menu/ContextMenu";
 import {ReactComponent as SendIcon} from "../../assets/send-img.svg";
 // import {w3cwebsocket as W3CWebSocket} from "websocket";
-import io from 'socket.io-client';
+import SocketApi from "../../api/SocketApi";
+import {socket} from "../../api/SocketApi";
+import FriendList from "./friend-list/FriendList";
+import {useDispatch, useSelector} from "react-redux";
+import {messageAction} from "../../store/message-slice";
+import {ReactComponent as OnlineStatus} from "../../assets/online-status.svg";
+import UserApi from "../../api/UserApi";
 
-const socket = io(process.env.REACT_APP_SOCKET_IO_DOMAIN, {path: "/socket/socket.io"}, {transports: ['websocket']});
 
 // const URL = 'ws://127.0.0.1:3098/wss';
 // const client = new W3CWebSocket(URL);
@@ -26,31 +31,31 @@ const socket = io(process.env.REACT_APP_SOCKET_IO_DOMAIN, {path: "/socket/socket
 function TextStorage() {
     const contextMenuRef = useRef()
     const [user, setUser] = useState('')
-    const [messages, setMessages] = useState([]);
     const [msgText, setMsgText] = useState("");
+    const dispatch = useDispatch()
+    const showMsgState = useSelector(state => state.message.showMsg)
+    const receiveFriend = useSelector(state => state.message.sendTo)
+    const allMessage = useSelector(state => state.message.messages)
+    const listFriend = useSelector(state => state.message.friend)
+    console.log(listFriend)
 
     useEffect(() => {
-        httpClient.get('/user').then(res => {
+        UserApi.getUser().then(res => {
             setUser(res.user.username)
         })
     }, [])
 
-    // useEffect(() => {
-    //     (async () => {
-    //         try {
-    //             const res = await httpClient.get('/user')
-    //             setUser(res.user.username)
-    //         } catch (err) {
-    //             console.log(err)
-    //         }
-    //     })()
-    // }, []);
-
     useEffect(() => {
-        httpClient.get('/msg').then(res => {
-            setMessages(res.messages)
-        })
-    }, []);
+        (async () => {
+            try {
+                const data = await UserApi.getAllUser()
+                dispatch(messageAction.getAllFriend(data.users))
+            } catch (err) {
+                console.log(err)
+            }
+        })();
+    },[])
+
 
     const handleContextMenuClick = (e, data) => {
         e.preventDefault();
@@ -81,10 +86,12 @@ function TextStorage() {
         // Save to server
         httpClient.post('/msg', {
             msg: msgText,
-            username: user
+            username: user,
+            sendTo: receiveFriend._id
         })
             .then(function (response) {
-                socket.emit('sendMessage', (response.message))
+                dispatch(messageAction.createMessage(response.message))
+                SocketApi.sendMessage(response.message)
             })
             .catch(function (error) {
                 console.log(error);
@@ -94,8 +101,15 @@ function TextStorage() {
     }
 
     useEffect(() => {
-        socket.on('message', (data) => {
-            setMessages(msg => [...msg, data])
+        SocketApi.displayMs(({data, from}) => {
+            console.log(listFriend)
+            for (let i = 0; i < listFriend.length; i++) {
+                const user = listFriend[i];
+                if (user._id === from) {
+                    dispatch(messageAction.createMessage(data))
+                    break;
+                }
+            }
         })
     },[socket])
 
@@ -103,10 +117,14 @@ function TextStorage() {
         if (e.key === 'Enter') {
             onSent();
         }
+
+        if (e.key === 'Escape') {
+            dispatch(messageAction.closeMsgHandle(false))
+        }
     }
 
     const deleteTextHandle = (id) => {
-        setMessages(texts => texts.filter(msg => msg._id !== id))
+        dispatch(messageAction.deleteMessage(id))
     }
 
     const CustomMenu = (props) => {
@@ -118,43 +136,56 @@ function TextStorage() {
 
         return (
             <ul className="context-menu-item">
-                <li onClick={deleteText}>Delete</li>
+                {props.user === user && <li onClick={deleteText}>Delete</li>}
+                <li onClick={() => {
+                    navigator.clipboard.writeText(props.text)
+                }}>Copy
+                </li>
             </ul>
         );
     }
 
     return (
         <div className="msg-wrapper">
-            <div className="msg">
-                <div className="msg-box">
-                    {
-                        messages.map((msg, index) => {
+            <FriendList/>
+            {showMsgState &&
+                <div className='msg-container'>
+                <div className="msg">
+                    <div className='msg-head'>
+                        <p className='msg-head__name'>{receiveFriend.username}</p>
+                        <OnlineStatus className='msg-head__status'/>
+                        <div className='msg-head__close' onClick={() => dispatch(messageAction.closeMsgHandle(false))}>&#x2715;</div>
+                    </div>
+                    <div className="msg-box">
+                        {
+                            allMessage.map((msg, index) => {
                                 return (
                                     <div className="msg-text" id={`${msg.user !== user && 'right'}`} key={index}
                                          onContextMenu={(e) =>
                                              handleContextMenuClick(e, {
                                                  menu: <CustomMenu onDelete={() => deleteTextHandle(msg._id)}
-                                                                   id={msg._id}/>
+                                                                   id={msg._id} text={msg.text} user={msg.user}/>
                                              })}>
                                         <div className='msg-text__wrap'>
                                             <p className="msg-text__text">{msg.user}: {msg.text}</p>
                                         </div>
                                     </div>
                                 )
-                        })
-                    }
+                            })
+                        }
 
-                </div>
-                <div className="msg-input">
-                    <input type="text" className="msg-input__text" placeholder='Enter a message...' value={msgText}
-                           onKeyDown={e => handleKeyDown(e)}
-                           onChange={e => setMsgText(e.target.value)}/>
-                    <div className="msg-input__send" onClick={onSent}>
-                        <SendIcon className="msg-input__send-ico"></SendIcon>
+                    </div>
+                    <div className="msg-input">
+                        <input type="text" className="msg-input__text" placeholder='Enter a message...' value={msgText}
+                               onKeyDown={e => handleKeyDown(e)}
+                               onChange={e => setMsgText(e.target.value)}/>
+                        <div className="msg-input__send" onClick={onSent}>
+                            <SendIcon className="msg-input__send-ico"></SendIcon>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <ContextMenu ref={contextMenuRef}/>
+                <ContextMenu ref={contextMenuRef}/>
+            </div>}
         </div>
     );
 }

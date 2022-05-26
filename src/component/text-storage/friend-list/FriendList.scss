@@ -1,0 +1,65 @@
+.friend-list-wrapper {
+  width: 30%;
+  display: flex;
+  justify-content: center;
+}
+
+.friend-list {
+  margin-top: 100px;
+  width: 500px;
+  max-width: 400px;
+  max-height: 700px;
+  box-shadow: 0 0 4px rgba(0,0,0,.14),0 4px 8px rgba(0,0,0,.28);
+  background-color: #2f323b;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  &__search-bar {
+    border-bottom: 1px solid;
+  }
+
+  &__friends {
+    display: flex;
+    flex-direction: column;
+
+    &-title {
+      padding: 5px 30px;
+      border-bottom: 1px solid #354259;
+    }
+
+    &-all {
+      display: block;
+      max-height: 100%;
+      list-style: none;
+      overflow: auto;
+
+      & li {
+        border-top: 1px solid #354259;
+        padding: 10px;
+        cursor: pointer;
+        transition: .3s all;
+
+        &:hover {
+          background-color: #262f3e;
+        }
+      }
+
+      &:last-child {
+        border-bottom: 1px solid #354259;
+      }
+    }
+  }
+
+  &__friend {
+    display: flex;
+    align-items: center;
+    justify-items: center;
+
+    &-status {
+      width: 10px;
+      padding: 0 10px;
+      fill:#6BBE66;
+    }
+  }
+}

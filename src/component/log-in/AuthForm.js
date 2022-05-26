@@ -11,9 +11,7 @@ import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props
 import GoogleLogin from 'react-google-login';
 import UserApi from "../../api/UserApi";
 import {SocialType} from "../../model/social-type";
-import io from 'socket.io-client';
-
-const socket = io(process.env.REACT_APP_SOCKET_IO_DOMAIN, {path: "/socket/socket.io"}, {transports: ['websocket']})
+import SocketApi, {socket} from "../../api/SocketApi";
 
 const AuthForm = () => {
     const navigate = useNavigate()
@@ -44,9 +42,9 @@ const AuthForm = () => {
                     const res = UserApi.userLogin(userInputValue, passwordInputValue)
                     const data = await res
                     UserService.login(data.token)
-                    socket.emit('join', {username: userInputValue})
+                    SocketApi.join(data.token)
                     window.location.reload();
-                    navigate('/welcome')
+                    navigate('/welcome');
                 } catch (err) {
                     setIsError(true)
                     console.log(err)
@@ -73,9 +71,9 @@ const AuthForm = () => {
         if (response.accessToken) {
             const { isExist } = await UserApi.checkUsername(response.email);
             if (!isExist) {
-                await UserApi.socialSignup({ email: response.email, socialType: SocialType.FACEBOOK })
+                await UserApi.socialSignup({ email: response.email, socialType: SocialType.FACEBOOK, name: response.name })
             }
-            const data = await UserApi.loginSocial({ email: response.email, socialType: SocialType.FACEBOOK })
+            const data = await UserApi.loginSocial({ email: response.email, socialType: SocialType.FACEBOOK, name: response.name})
             UserService.login(data.token)
             window.location.reload();
             navigate('/welcome')

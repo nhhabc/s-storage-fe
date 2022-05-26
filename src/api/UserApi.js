@@ -30,5 +30,9 @@ export default {
             username: user,
             password: pass
         })
+    },
+
+    getAllUser () {
+        return httpClient.get('/all-user')
     }
 }

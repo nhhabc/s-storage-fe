@@ -5,6 +5,13 @@
   color: #fff;
   height: 100vh;
 
+  .msg-container{
+    width: 70%;
+    height: 100%;
+    display: flex;
+    justify-items: center;
+  }
+
   .msg {
     margin-top: 100px;
     width: 600px;
@@ -23,6 +30,28 @@
     @media only screen and (max-width: 300px) {
       margin: 20px;
       transform: scale(.7);
+    }
+
+    .msg-head {
+      display: flex;
+      align-items: center;
+
+      &__name {
+        padding: 10px 5px 10px 15px;
+      }
+
+      &__status {
+        width: 10px;
+        padding: 0 10px;
+        fill:#6BBE66;
+      }
+
+      &__close {
+        margin-left: auto;
+        margin-right: 20px;
+        cursor: pointer;
+        color: black;
+      }
     }
 
     .msg-box {

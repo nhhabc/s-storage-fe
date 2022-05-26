@@ -1,6 +1,6 @@
-import {configureStore, createSlice} from "@reduxjs/toolkit";
+import {createSlice} from "@reduxjs/toolkit";
 
-const storageSlice = createSlice({
+export const storageSlice = createSlice({
     name: 'storage',
     initialState: {
         folders: [],
@@ -23,13 +23,13 @@ const storageSlice = createSlice({
         onSearchChange(state, action) {
             state.searchField = action.payload;
 
-            state.filteredFolders = state.folders.filter(items => {
-                return items.name.toLowerCase().includes(state.searchField.toLowerCase())
-            })
+            state.filteredFolders = state.folders.filter(items =>
+                items.name.toLowerCase().includes(state.searchField.toLowerCase())
+            )
 
-            state.filteredFiles = state.files.filter(items => {
-                return items.name.toLowerCase().includes(state.searchField.toLowerCase())
-            })
+            state.filteredFiles = state.files.filter(items =>
+                items.name.toLowerCase().includes(state.searchField.toLowerCase())
+            )
         },
 
         addFolder(state, action) {
@@ -59,7 +59,3 @@ const storageSlice = createSlice({
 })
 
 export const storageAction = storageSlice.actions;
-
-export const store = configureStore({
-    reducer: {storage: storageSlice.reducer}
-})
