@@ -1,16 +1,27 @@
 import './FriendList.scss'
 import SearchBar from "../../../layout/SearchBar";
 import {ReactComponent as OnlineStatus} from "../../../assets/online-status.svg";
-import {useEffect} from "react";
-import UserApi from "../../../api/UserApi";
 import {useDispatch, useSelector} from "react-redux";
 import {messageAction} from "../../../store/message-slice";
 import httpClient from "../../../api/http-client";
+import {useEffect} from "react";
+import UserApi from "../../../api/UserApi";
 
 const FriendList = () => {
     const listFriends = useSelector(state => state.message.friendFilter)
     const dispatch = useDispatch()
 
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const data = await UserApi.getAllUser()
+                dispatch(messageAction.getAllFriend(data.users))
+            } catch (err) {
+                console.log(err)
+            }
+        })();
+    },[dispatch])
 
     const showMessage = async (friend) => {
         try {
@@ -29,7 +40,7 @@ const FriendList = () => {
         <div className='friend-list-wrapper'>
             <div className='friend-list'>
                 <div className='friend-list__search-bar'>
-                    <SearchBar/>
+                    <SearchBar search='Search friend...'/>
                 </div>
                 <div className='friend-list__friends'>
                     <p className='friend-list__friends-title'>All friends:</p>

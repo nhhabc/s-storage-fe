@@ -113,7 +113,7 @@ const FolderContainer = () => {
 
     return (
         <div className='cover' onContextMenu={(e) => handleContextMenuClick(e, {menu: <CustomMenuFolderContainer/>})}>
-            <SearchBar/>
+            <SearchBar search='Search...'/>
             <div className='folder-container'>
                 <p className="folder-container__menu">All folder:</p>
                 {filteredFolderList.map((item, i) => {

@@ -4,11 +4,11 @@ const url = process.env.REACT_APP_SOCKET_IO_DOMAIN ? process.env.REACT_APP_SOCKE
 
 const path = process.env.REACT_APP_SOCKET_IO_DOMAIN ? {path: "/socket/socket.io"} : '';
 
-export const socket = io(url, path, {transports: ['websocket']}, { autoConnect: false })
+export const socket = io(url, path, {transports: ['websocket']})
 
 export default {
-    join(token) {
-        socket.emit('join', token)
+    join(room) {
+        socket.emit('join', room)
     },
 
     disconnect (username) {

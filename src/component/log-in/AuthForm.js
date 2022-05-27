@@ -11,7 +11,6 @@ import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props
 import GoogleLogin from 'react-google-login';
 import UserApi from "../../api/UserApi";
 import {SocialType} from "../../model/social-type";
-import SocketApi, {socket} from "../../api/SocketApi";
 
 const AuthForm = () => {
     const navigate = useNavigate()
@@ -42,7 +41,6 @@ const AuthForm = () => {
                     const res = UserApi.userLogin(userInputValue, passwordInputValue)
                     const data = await res
                     UserService.login(data.token)
-                    SocketApi.join(data.token)
                     window.location.reload();
                     navigate('/welcome');
                 } catch (err) {

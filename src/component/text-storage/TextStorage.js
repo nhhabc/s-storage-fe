@@ -4,29 +4,12 @@ import {useEffect, useRef, useState} from "react";
 import httpClient from "../../api/http-client";
 import {ContextMenu} from "../context-menu/ContextMenu";
 import {ReactComponent as SendIcon} from "../../assets/send-img.svg";
-// import {w3cwebsocket as W3CWebSocket} from "websocket";
-import SocketApi from "../../api/SocketApi";
-import {socket} from "../../api/SocketApi";
+import SocketApi, {socket} from "../../api/SocketApi";
 import FriendList from "./friend-list/FriendList";
 import {useDispatch, useSelector} from "react-redux";
 import {messageAction} from "../../store/message-slice";
 import {ReactComponent as OnlineStatus} from "../../assets/online-status.svg";
 import UserApi from "../../api/UserApi";
-
-
-// const URL = 'ws://127.0.0.1:3098/wss';
-// const client = new W3CWebSocket(URL);
-// client.onopen = () => {
-//     console.log('WebSocket Client Connected');
-// };
-//
-// client.onclose = () => {
-//     console.log('WebSocket Client Disconnected');
-// };
-//
-// client.onmessage = (message) => {
-//     console.log(message);
-// };
 
 function TextStorage() {
     const contextMenuRef = useRef()
@@ -37,25 +20,12 @@ function TextStorage() {
     const receiveFriend = useSelector(state => state.message.sendTo)
     const allMessage = useSelector(state => state.message.messages)
     const listFriend = useSelector(state => state.message.friend)
-    console.log(listFriend)
 
     useEffect(() => {
         UserApi.getUser().then(res => {
             setUser(res.user.username)
         })
     }, [])
-
-    useEffect(() => {
-        (async () => {
-            try {
-                const data = await UserApi.getAllUser()
-                dispatch(messageAction.getAllFriend(data.users))
-            } catch (err) {
-                console.log(err)
-            }
-        })();
-    },[])
-
 
     const handleContextMenuClick = (e, data) => {
         e.preventDefault();
@@ -81,7 +51,6 @@ function TextStorage() {
     )
     const onSent = () => {
         if (msgText.trim().length === 0) return;
-        // client.send(JSON.stringify(message))
 
         // Save to server
         httpClient.post('/msg', {
@@ -102,7 +71,6 @@ function TextStorage() {
 
     useEffect(() => {
         SocketApi.displayMs(({data, from}) => {
-            console.log(listFriend)
             for (let i = 0; i < listFriend.length; i++) {
                 const user = listFriend[i];
                 if (user._id === from) {
@@ -111,7 +79,7 @@ function TextStorage() {
                 }
             }
         })
-    },[socket])
+    },[dispatch, listFriend, socket])
 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {

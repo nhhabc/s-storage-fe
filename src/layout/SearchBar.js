@@ -4,7 +4,7 @@ import {useDispatch} from "react-redux";
 import {storageAction} from "../store/storage-slice";
 import {messageAction} from "../store/message-slice";
 
-const SearchBar = () => {
+const SearchBar = (props) => {
     const dispatch = useDispatch()
 
     const onSearching = (e) => {
@@ -15,7 +15,7 @@ const SearchBar = () => {
     return (
         <div className='search'>
             <SearchIco className='search__icon'/>
-            <input type="text" placeholder='Search...' className='search__input' onChange={onSearching}/>
+            <input type="text" placeholder={props.search} className='search__input' onChange={onSearching}/>
         </div>
     )
 }
