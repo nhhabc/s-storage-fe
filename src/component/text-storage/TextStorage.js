@@ -19,11 +19,11 @@ function TextStorage() {
     const showMsgState = useSelector(state => state.message.showMsg)
     const receiveFriend = useSelector(state => state.message.sendTo)
     const allMessage = useSelector(state => state.message.messages)
-    const listFriend = useSelector(state => state.message.friend)
+
 
     useEffect(() => {
         UserApi.getUser().then(res => {
-            setUser(res.user.username)
+            setUser(res.user)
         })
     }, [])
 
@@ -55,7 +55,7 @@ function TextStorage() {
         // Save to server
         httpClient.post('/msg', {
             msg: msgText,
-            username: user,
+            username: user.username,
             sendTo: receiveFriend._id
         })
             .then(function (response) {
@@ -70,16 +70,12 @@ function TextStorage() {
     }
 
     useEffect(() => {
-        SocketApi.displayMs(({data, from}) => {
-            for (let i = 0; i < listFriend.length; i++) {
-                const user = listFriend[i];
-                if (user._id === from) {
-                    dispatch(messageAction.createMessage(data))
-                    break;
-                }
+        SocketApi.displayMs(({data, from, to}) => {
+            if (receiveFriend._id === from && user._id === to) {
+                dispatch(messageAction.createMessage(data))
             }
         })
-    },[dispatch, listFriend, socket])
+    },[dispatch,receiveFriend, socket])
 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
@@ -104,7 +100,7 @@ function TextStorage() {
 
         return (
             <ul className="context-menu-item">
-                {props.user === user && <li onClick={deleteText}>Delete</li>}
+                {props.user === user.username && <li onClick={deleteText}>Delete</li>}
                 <li onClick={() => {
                     navigator.clipboard.writeText(props.text)
                 }}>Copy
@@ -128,7 +124,7 @@ function TextStorage() {
                         {
                             allMessage.map((msg, index) => {
                                 return (
-                                    <div className="msg-text" id={`${msg.user !== user && 'right'}`} key={index}
+                                    <div className="msg-text" id={`${msg.user !== user.username && 'right'}`} key={index}
                                          onContextMenu={(e) =>
                                              handleContextMenuClick(e, {
                                                  menu: <CustomMenu onDelete={() => deleteTextHandle(msg._id)}

@@ -8,9 +8,8 @@ import {useEffect} from "react";
 import UserApi from "../../../api/UserApi";
 
 const FriendList = () => {
-    const listFriends = useSelector(state => state.message.friendFilter)
+    const listFriendsFilter = useSelector(state => state.message.friendFilter)
     const dispatch = useDispatch()
-
 
     useEffect(() => {
         (async () => {
@@ -45,7 +44,7 @@ const FriendList = () => {
                 <div className='friend-list__friends'>
                     <p className='friend-list__friends-title'>All friends:</p>
                     <ul className='friend-list__friends-all'>
-                        {listFriends.map((friends, index) => {
+                        {listFriendsFilter.map((friends, index) => {
                             return (
                                 <li className='friend-list__friend' key={index} onClick={() => showMessage(friends)}>
                                     <OnlineStatus className='friend-list__friend-status'/>

@@ -25,7 +25,7 @@ const MainHeader = () => {
             <div className='nav__logo' onClick={() => navigate('/welcome')}>S-Storage</div>
             <div className='nav__options'>
                 {isLoggedIn && <NavLink activeclassname='active' to='/folder'><p>Folder</p></NavLink>}
-                {isLoggedIn && <NavLink activeclassname='active' to='/msg' onClick={() => dispatch(messageAction.closeMsgHandle(false))}><p>Message</p></NavLink>}
+                {isLoggedIn && <NavLink activeclassname='active' to='/msg' onClick={() => dispatch(messageAction.closeMsgHandle(false))} reloadDocument><p>Message</p></NavLink>}
             </div>
             {!isLoggedIn && <button onClick={() => navigate('/login')}>Login</button>}
             {isLoggedIn && <button onClick={logoutHandler}>Logout</button>}
