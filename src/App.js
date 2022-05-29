@@ -7,6 +7,7 @@ import AuthForm from "./component/log-in/AuthForm";
 import Welcome from "./layout/Welcome";
 import UserService from "./services/UserService";
 import Footer from "./layout/Footer";
+import UserProfile from "./component/user-profile/UserProfile";
 
 function App() {
 
@@ -26,6 +27,7 @@ function App() {
                 {isLoggedIn && <Route path='/folder' element={<FolderContainer/>}/>}
                 {isLoggedIn && <Route path='/folder/:folderId' element={<FolderContainer/>}/>}
                 {isLoggedIn && <Route path='/msg' element={<TextStorage/>}/>}
+                {isLoggedIn && <Route path='/profile' element={<UserProfile/>}/>}
             </Routes>
             </main>
             <Footer/>

@@ -19,6 +19,34 @@
     height: fit-content;
   }
 
+  &__status {
+    display: flex;
+    align-items: center;
+
+    &-greet {
+      margin-right: 10px;
+      font-family: 'Lobster', cursive;
+      color: #E8F9FD;
+    }
+
+    &-profile {
+      border-bottom: solid 1px #E8F9FD;
+      color: #E8F9FD;
+      cursor: pointer;
+      padding: 0px 5px;
+      transition: .3s all;
+      text-decoration: none;
+
+      &:hover {
+        background-color: #2F8F9D;
+        transform: translateY(-3px);
+        color: white;
+        border: none;
+        border-radius: 5px;
+      }
+    }
+  }
+
   &__options {
     display: flex;
     flex-direction: row;

@@ -34,5 +34,22 @@ export default {
 
     getAllUser () {
         return httpClient.get('/all-user')
+    },
+
+    updateUserInfo (userId, data) {
+        return httpClient.put('/user/' + userId, {
+            data
+        })
+    },
+
+    updateUserPassword (data) {
+        return httpClient.put('/updatePassword', {
+            data
+        })
+    },
+
+    deleteAccount(password) {
+        return httpClient.delete('/deleteAccount?password=' + password)
     }
 }
+

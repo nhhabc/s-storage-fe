@@ -94,7 +94,7 @@ const AuthForm = () => {
                 </div>
                 <div className="form-group">
                     <KeyIcon className="form-user-icon"></KeyIcon>
-                    <input type="password" className="form-input" placeholder="Password" onChange={(e) => setInputPassword(e.target.value)}/>
+                    <input type="password" className="form-input" placeholder="Password" autocomplete="on" onChange={(e) => setInputPassword(e.target.value)}/>
                 </div>
                 {!isLoading && isError && <div className='error'>{errorMsg}</div>}
                 {!isLoading && <input type="submit" value={`${isLogin ? 'Login' : 'Create Account'}`} className="form-submit"/>}
