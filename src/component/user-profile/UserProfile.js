@@ -24,23 +24,8 @@ const UserProfile = () => {
     const emailInputRef = useRef()
 
     useEffect(() => {
-        (async () => {
-            try {
-                const res = await UserApi.getUser()
-                dispatch(userAction.getCurrentUserInfo(res.user))
-            } catch (err) {
-                console.log(err)
-            }
-        })()
+       UserApi.getUser().then(res => dispatch(userAction.getCurrentUserInfo(res.user)))
     }, [dispatch])
-
-    // const check = (user) => {
-    //     if (user && user.socialType.includes('FACEBOOK')) {
-    //         return dispatch(userAction.checkSocialUser(true))
-    //     } else {
-    //         return dispatch(userAction.checkSocialUser(false))
-    //     };
-    // }
 
     const checkUser = () => {
         if (currentUser.socialType.length > 0) {
